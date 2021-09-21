@@ -21,12 +21,12 @@ function Appointment() {
         <div className="AppointmentContainer">
             <button onClick={modalOpenHandler}>New Appointment</button>
 
-        {isModalOpen ? 
-        <Modal modalCloseHandler={modalCloseHandler}>
-            <NewAppointment modalCloseHandler={modalCloseHandler} />
-        </Modal> : null}
+            {isModalOpen ? 
+            <Modal modalCloseHandler={modalCloseHandler}>
+                <NewAppointment modalCloseHandler={modalCloseHandler} />
+            </Modal> : null}
 
-        <ListAppointments />
+            <ListAppointments />
         </div>
 
     )

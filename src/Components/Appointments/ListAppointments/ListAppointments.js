@@ -1,10 +1,10 @@
 // TODO: Default list: update and delete view appointments
 import React from 'react';
-
 import {useState, useEffect} from 'react';
-
 import db from '../../../firebase';
 import { doc, query, where, collection, onSnapshot, orderBy, Timestamp, deleteDoc} from "firebase/firestore"; 
+
+import {Link} from 'react-router-dom';
 
 import FilterAppointments from '../FilterAppointments/FilterAppointments';
 import Modal from '../../UI/Modal/Modal';
@@ -15,12 +15,14 @@ var _ = require('lodash');
 
 function ListAppointments() {
     const [appointments, setAppointments] = useState([]);
+    
     const [deleteAppointmentModal, setDeleteAppointmentModal] = useState(false);
 
     const openDeleteAppointmentModal = () => setDeleteAppointmentModal(true);
     const closeDeleteAppointmentModal = () => setDeleteAppointmentModal(false);
 
     const [editAppointmentModal, setEditAppointmentModal] = useState(false);
+
     const openEditAppointmentModal = () => setEditAppointmentModal(true);
     const closeEditAppointmentModal = () => setEditAppointmentModal(false);
 
@@ -92,7 +94,11 @@ function ListAppointments() {
             {!_.isUndefined(appointments) && appointments.length > 0 ? appointments.map((appointment, index) => (
                     <div key={index} className="listDiv">
                         <hr />
-                        <h3>{appointment.fullName}</h3>
+
+                        <Link to={`/appointments/${appointment.id}`}>
+                            <h3>{appointment.fullName}</h3>
+                        </Link>
+
                         <p>{appointment.email} | {appointment.phoneNumber}</p>
                         <p>Trade In: {appointment.isTradeIn.toString()}</p>
                         <p><em>Created at: {appointment.createdAt}</em></p>

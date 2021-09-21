@@ -18,7 +18,6 @@ function EditAppointment(props) {
 
     const [appointment, setAppointment] = useState(appointmentInitialState);
 
-
     useEffect(() => {
         const fetchAppointments = async (id) => {
             const docRef = doc(db, "customers", id);
