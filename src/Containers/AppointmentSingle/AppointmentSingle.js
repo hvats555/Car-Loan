@@ -9,6 +9,8 @@ import Modal from '../../Components/UI/Modal/Modal';
 import EditAppointment from '../../Components/Appointments/EditAppointment/EditAppointment';
 import ConfirmationPrompt from '../../Components/ConfirmationPrompt/ConfirmationPrompt';
 
+import ApprovedBanks from '../../Containers/ApprovedBanks/ApprovedBanks';
+
 import {useHistory} from 'react-router-dom';
 
 function AppointmentDetails({ match }) {
@@ -47,9 +49,10 @@ function AppointmentDetails({ match }) {
                         fullName: doc.data().fullName,
                         phoneNumber: doc.data().phoneNumber,
                         email: doc.data().email,
-                        isTradeIn: doc.data().isTradeIn,
+                        isTradeIn: doc.data().isTradeIn.toString(),
                         createdAt: new Date(doc.data().createdAt.seconds * 1000).toString(),
                         appointmentDate: new Date(doc.data().appointmentDate.seconds * 1000).toString(),
+                        approvedBanks: doc.data().approvedBanks
                     })
                 } else {
                         console.log("No such document!");
@@ -75,12 +78,15 @@ function AppointmentDetails({ match }) {
         <div>
             <h3>{appointment.fullName}</h3>
             <p>{appointment.email} | {appointment.phoneNumber}</p>
-            <p>Trade In: {appointment.isTradeIn.toString()}</p>
+            <p>Trade In: {appointment.isTradeIn}</p>
             <p><em>Appointment Date: {appointment.appointmentDate}</em></p>
 
             <button onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}}>Delete (X)</button>
 
             <button onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>Edit</button>
+
+            <ApprovedBanks customerId={match.params.id} appointment={appointment} />
+
                 {
                     editAppointmentModal ? 
                     <Modal modalCloseHandler={closeEditAppointmentModal}>
@@ -88,6 +94,7 @@ function AppointmentDetails({ match }) {
                     </Modal>
                     : null
                 }
+                
                 {   deleteAppointmentModal ?
                     <Modal modalCloseHandler={closeDeleteAppointmentModal}>
                         <ConfirmationPrompt 

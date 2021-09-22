@@ -16,7 +16,8 @@ function NewAppointment(props) {
         phoneNumber: '',
         email: '',
         isTradeIn: false,
-        appointmentDate: todaysDate()
+        appointmentDate: todaysDate(),
+        approvedBanks: []
     }
 
     const [appointment, setAppointment] = useState(appointmentInitialState);
