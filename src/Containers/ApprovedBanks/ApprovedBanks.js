@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import AddApprovedBanks from '../../Components/ApprovedBanks/AddApprovedBanks';
 import ListApprovedBanks from '../../Components/ApprovedBanks/ListApprovedBanks/ListApprovedBanks';
+import CarSearch from '../../Components/CarSearch/CarSearch';
 
 import Modal from '../../Components/UI/Modal/Modal';
 
@@ -22,6 +23,9 @@ function ApprovedBanks(props) {
                 </Modal> : null
             }
             <ListApprovedBanks approvedBanks={props.appointment.approvedBanks}/>
+
+            <CarSearch customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
+
         </div>
     )
 }

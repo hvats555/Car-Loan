@@ -1,19 +1,23 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import { doc, updateDoc, arrayUnion, getDocs, collection } from "firebase/firestore"; 
+import calculateEmi from '../../utils/calculateEmi';
+import prepareCarSearchResults from '../../utils/prepareCarSearchResults';
 
 import db from '../../firebase';
 
 function AddApprovedBanks(props) {
     const initialApprovedBankState = {
+        bankId: '',
         bankName: '',
-        approvalType: '',
-        amount: '',
-        term: ''
+        amount: 0,
+        term: 0,
+        monthlyEmi: 0,
+        interestRate: 0
     }
 
     const [approvedBank, setApprovedBank] = useState(initialApprovedBankState);
-    const [banks, setBanks] = useState([])
+    const [banks, setBanks] = useState([]);
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -21,30 +25,44 @@ function AddApprovedBanks(props) {
             const banksArray = []
             querySnapshot.forEach((doc) => {
                 banksArray.push({
+                    id: doc.id,
                     name: doc.data().name
                 });
             });
             setBanks(banksArray);
         }
-
         fetchBanks();
-    })
+    });
 
     const saveApprovedBankInDb = async (event) => {
         event.preventDefault();
         
-        const appointmentRef = doc(db, "customers", props.customerId);
+        approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term);
 
-        await updateDoc(appointmentRef, {
+        const approvedBankRef = doc(db, "customers", props.customerId);
+
+        await updateDoc(approvedBankRef, {
             approvedBanks: arrayUnion(approvedBank)
         });
 
         setApprovedBank(initialApprovedBankState);
         props.modalCloseHandler();
+
+        console.log(approvedBank);
+
+        prepareCarSearchResults(props.customerId, approvedBank.bankId, 3000);
     }
 
     const inputChangeHandler = (key, value) => {
         setApprovedBank({...approvedBank, [key]: value});
+    }
+
+    const bankInputHandler = (index) => {
+        setApprovedBank({
+            ...approvedBank,
+            bankId: banks[index].id,
+            bankName: banks[index].name
+        });
     }
 
     return ( 
@@ -54,22 +72,19 @@ function AddApprovedBanks(props) {
 
                 Bank name: 
 
-                <select value={approvedBank.bankName} name="bankName" placeholder="Select Banks" onChange={(event) => {inputChangeHandler('bankName', event.target.value)}}>
+                <select name="bankName" placeholder="Select Banks" onChange={(event) => {bankInputHandler(event.target.value)}}>
+                    <option key='0' disabled selected value={null}>Select Bank</option>
+
                     {
-                        banks ? banks.map((bank) => (
-                            <option key={banks.id} value={banks.id}>{bank.name}</option>
+                        banks ? banks.map((bank, index) => (
+                            <option key={bank.id} value={index}>{bank.name}</option>
                         )) : <option key='N/A' disabled value="N/A">No banks found</option>
                     }
                 </select>
 
-                Approval Type: 
+                Interest Rate:
 
-                <select value={approvedBank.approvalType} name="approvalType" placeholder="Approval Type" onChange={(event) => {inputChangeHandler('approvalType', event.target.value)}}>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
-                </select>
+                <input type="number" name="interestRate" placeholder="Interest Rate" value={approvedBank.interestRate} onChange={(event) => {inputChangeHandler("interestRate", event.target.value)}} />
 
                 Amount: 
                 

@@ -7,6 +7,7 @@ import Bank from './Containers/Bank/Bank';
 
 import {Route, BrowserRouter as Router, Switch, Link} from 'react-router-dom'
 
+import MyDropzone from './Components/Upload/Inventory';
 
 function App() {
   return (

@@ -11,6 +11,7 @@ function ListBanks() {
         const fetchBanks = async () => {
             const q = query(collection(db, "banks"), orderBy('createdAt', 'desc'));
             onSnapshot(q, (querySnapshot) => {
+                console.log(querySnapshot);
                 const banks = [];
                 querySnapshot.forEach((doc) => {
                     const object = {
@@ -32,7 +33,7 @@ function ListBanks() {
         <div>
             { 
                 banks ? banks.map((bank) => (
-                    <div>
+                    <div key={bank.id}>
                         <hr />
                         <p><strong>Bank Name:</strong> {bank.name}</p>
                         <hr />
