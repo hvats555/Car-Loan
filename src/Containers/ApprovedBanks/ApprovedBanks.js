@@ -22,7 +22,7 @@ function ApprovedBanks(props) {
                     <AddApprovedBanks modalCloseHandler={() => {newApprovedBankModalHandler(false)}} customerId={props.customerId} />
                 </Modal> : null
             }
-            <ListApprovedBanks approvedBanks={props.appointment.approvedBanks}/>
+            <ListApprovedBanks customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
 
             <CarSearch customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
 

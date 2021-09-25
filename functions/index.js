@@ -117,7 +117,7 @@ app.post('/cars/search', async (req, res) => {
     const {bankId, customerId, profitAmount} = req.body;
 
     // purgeSelectedCars(customerId, bankId);
-    purgeSelectedCars("T9kN8qUdmMKrKa00Ri32", "QTUiexwDld2QAhlhKRTY");
+    purgeSelectedCars(customerId, bankId);
 
     console.log("Bank id", bankId);
     console.log("Customer id", customerId);
