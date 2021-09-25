@@ -170,6 +170,7 @@ app.post('/cars/search', async (req, res) => {
         const emi = emiCalculator(car.price, parseInt(approvedBank.interestRate), parseInt(carStatus.maxTerm));
 
         if(Math.round(emi) <= Math.round(parseInt(approvedBank.monthlyEmi))) {
+            console.log(`Adding ${doc.name}`);
             await db.collection('selectedCars').add({
                 car: doc.id,
                 customer: customerId,

@@ -9,6 +9,7 @@ const store = require('store');
 
 function CarSearch(props) {
     const [cars, setCars] = useState([]);
+    const [selectedBankId, setSelectedBankId] = useState();
 
     const fetchCarSearchResults = async (customerId, bankId) => {
         const tempCarIds = [];
@@ -49,12 +50,12 @@ function CarSearch(props) {
     return (
         <div>
             <h1>Search Reults</h1>
-            {console.log("Approved", props.approvedBanks)}
 
             Results:-
 
             <select name="bankName" placeholder="Select Banks" onChange={(event) => {
                 inputChangeHandler(event.target.value);
+                setSelectedBankId(event.target.value);
             }}>
                 <option key='0' disabled selected value={null}>Select Bank</option>
 
@@ -64,6 +65,8 @@ function CarSearch(props) {
                     )) : <option key='N/A' disabled value="N/A">No banks found</option>
                 }
             </select>
+
+            <button onClick={() => {fetchCarSearchResults(props.customerId, selectedBankId)}}>Refresh results</button>
 
 
             {cars ? cars.map((car, index) => (
