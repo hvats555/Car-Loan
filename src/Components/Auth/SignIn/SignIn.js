@@ -48,8 +48,9 @@ export default function SignIn() {
         const res = await login(input.email, input.password);
         history.push('/');
         console.log(currentUser);
-    } catch {
+    } catch (e) {
         console.log("Failed to login");
+        console.log(e);
         console.log(currentUser);
     }
   }
