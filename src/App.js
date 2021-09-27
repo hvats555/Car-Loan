@@ -19,6 +19,8 @@ function App() {
     <Router>
           <AuthProvider>
               {console.log(process.env.REACT_APP_CLOUD_FUNCTIONS_URL)}
+              {console.log(process.env.NODE_ENV)}
+
               <Switch>
                 <Route path="/signin" component={SignIn} />
                 <Route component={Layout}/>

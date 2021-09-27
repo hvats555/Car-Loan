@@ -4,7 +4,7 @@ import { doc, updateDoc, arrayUnion, getDocs, collection, arrayRemove } from "fi
 import calculateEmi from '../../../utils/calculateEmi';
 import prepareCarSearchResults from '../../../utils/prepareCarSearchResults';
 import db from '../../../firebase';
-import store from 'store';
+// import store from 'store';
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -66,7 +66,7 @@ function EditApprovedBanks(props) {
         setApprovedBank(initialApprovedBankState);
         props.modalCloseHandler();
 
-        store.remove(props.approvedBank.bankId);
+        // store.remove(props.approvedBank.bankId);
         props.setCars([]);
         prepareCarSearchResults(props.customerId, approvedBank.bankId, profitMargin);
         props.fetchCarSearchResults(props.customerId, props.approvedBank.bankId);

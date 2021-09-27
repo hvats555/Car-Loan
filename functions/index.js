@@ -70,7 +70,7 @@ exports.upload = functions.https.onRequest((req, res) => {
                     } else if (req.headers['x-upload-collection'] === 'carsInventory') {
                         upload_carsInventory(req.headers['x-upload-collection'], jsonObj);
                     }
-                    // fs.unlinkSync(file);
+                    fs.unlinkSync(file);
                 })
                     res.write(`${file}\n`);   
                 }

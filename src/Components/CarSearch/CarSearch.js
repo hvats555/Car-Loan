@@ -14,6 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -27,12 +28,13 @@ function CarSearch(props) {
     const [selectedBankId, setSelectedBankId] = useState();
  
     const inputChangeHandler = (bankId) => {
-        if(store.get(bankId)) {
-            props.setCars(store.get(bankId));
-        } else {
+        // if(store.get(bankId) && store.get(bankId).length > 0) {
+        //     props.setCars(store.get(bankId));
+        // } else {
             props.fetchCarSearchResults(props.customerId, bankId)
-        }
+        // }
     }
+
 
     return (
         <div>
@@ -123,6 +125,16 @@ function CarSearch(props) {
             </Grid> : <Box sx={{ display: 'flex', justifyContent: "center", marginTop: "1rem"}}>
                         <CircularProgress />
                     </Box>}
+
+            {!props.isCarEmpty ?
+                !props.moreCarSearchLoading ? 
+                <Box sx={{ display: 'flex', justifyContent: "center", marginTop: "1rem"}}>
+                    <Button sx={{margin: '20px 0'}} type="submit" variant="outlined" onClick={() => {props.fetchMoreCarSearchResults(props.customerId, selectedBankId)}}>Show more</Button>
+                </Box> : <Box sx={{ display: 'flex', justifyContent: "center", marginTop: "1rem"}}>
+                    <CircularProgress />
+                </Box> : null
+            }
+
         </div>
     )
 }
