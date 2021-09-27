@@ -15,51 +15,22 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 const store = require('store');
 
 // Problem Statement -> Prepare car search results for that bank front end after adding the approved bank 
 
 
 function CarSearch(props) {
-    const [cars, setCars] = useState([]);
     const [selectedBankId, setSelectedBankId] = useState();
-
-    const fetchCarSearchResults = async (customerId, bankId) => {
-        const tempCarIds = [];
-        const q = query(collection(db, "selectedCars"), where('customer', '==', customerId), where('bank', '==', bankId));
-
-        const querySnapshot = await getDocs(q);
-        const carsArray = [];
-
-        querySnapshot.forEach((d) => {
-            tempCarIds.push({car: d.data().car, calculatedEmi: d.data().calculatedEmi});
-        });
-
-        for(const tempCarId of tempCarIds) {
-            const docRef = doc(db, "carsInventory", tempCarId.car);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                carsArray.push({details: docSnap.data(), calculatedEmi: tempCarId.calculatedEmi});
-            }
-        }
-
-        setCars(carsArray);
-
-        if(store.get(bankId)) {
-            store.remove(bankId);
-        } 
-
-        store.set(bankId, carsArray);
-
-        console.log(cars);
-    }
  
     const inputChangeHandler = (bankId) => {
         if(store.get(bankId)) {
-            setCars(store.get(bankId));
+            props.setCars(store.get(bankId));
         } else {
-            fetchCarSearchResults(props.customerId, bankId)
+            props.fetchCarSearchResults(props.customerId, bankId)
         }
     }
 
@@ -95,9 +66,8 @@ function CarSearch(props) {
                 </Grid>
             </Grid>
 
-            <button onClick={() => {fetchCarSearchResults(props.customerId, selectedBankId)}}>Refresh results</button>
-            <Grid container>
-                {cars ? cars.map((car, index) => (
+            {!props.carSearchLoading ? <Grid container>
+                {props.cars ? props.cars.map((car, index) => (
                     <Grid key={index} item xs={12}>
                         <CardActionArea target="_blank" component="a" href={car.details.car_URL}>
                             <Card sx={{ display: 'flex'}}>
@@ -150,7 +120,9 @@ function CarSearch(props) {
                         </CardActionArea>
                     </Grid>             
                 )): <p>Nothing to display</p>}
-            </Grid>
+            </Grid> : <Box sx={{ display: 'flex', justifyContent: "center", marginTop: "1rem"}}>
+                        <CircularProgress />
+                    </Box>}
         </div>
     )
 }

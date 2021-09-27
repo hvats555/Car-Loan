@@ -57,7 +57,7 @@ function ListApprovedBanks(props) {
             {
                 approvedBankEditModal ?
                 <Modal modalCloseHandler={() => {approvedBankEditModalHandler(false)}}>
-                    <EditApprovedBanks fetchCarSearchResults={props.fetchCarSearchResults} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
+                    <EditApprovedBanks fetchCarSearchResults={props.fetchCarSearchResults} setCars={props.setCars} fetchCarSearchResults={props.fetchCarSearchResults} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
                 </Modal> : null
             }
 

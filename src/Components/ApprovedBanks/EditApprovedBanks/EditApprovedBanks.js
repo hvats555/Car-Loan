@@ -53,7 +53,6 @@ function EditApprovedBanks(props) {
 
         const approvedBankRef = doc(db, "customers", props.customerId);
 
-        store.remove(props.approvedBank.bankId);
         // remove from state
 
         await updateDoc(approvedBankRef, {
@@ -67,8 +66,10 @@ function EditApprovedBanks(props) {
         setApprovedBank(initialApprovedBankState);
         props.modalCloseHandler();
 
+        store.remove(props.approvedBank.bankId);
+        props.setCars([]);
         prepareCarSearchResults(props.customerId, approvedBank.bankId, profitMargin);
-        
+        props.fetchCarSearchResults(props.customerId, props.approvedBank.bankId);
     }
 
     const inputChangeHandler = (key, value) => {
