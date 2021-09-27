@@ -1,6 +1,6 @@
 .modal {
   width: clamp(50%, 700px, 90%);
-  height: min(50%, 300px);
+  height: min(60%, 500px);
 
   margin: auto;
   padding: 0 2rem;
@@ -8,6 +8,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   background-color: #ffffff;
+
+  overflow: hidden;
+}
+
+.modal > div {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 17px;
+  box-sizing: content-box;
+}
+
+.modal__closeBtn {
+  align-self: flex-end;
 }

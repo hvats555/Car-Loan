@@ -1,0 +1,11 @@
+/*List Appointment table styling*/
+
+.listAppointment__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listAppointment__table-row:hover {
+  background-color: #ece9e9;
+}

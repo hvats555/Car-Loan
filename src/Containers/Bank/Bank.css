@@ -1,0 +1,11 @@
+.Bank {
+  position: relative;
+  height: 80vh;
+}
+
+.createButton {
+  position: fixed;
+  position: absolute !important;
+  right: 0;
+  bottom: 5%;
+}

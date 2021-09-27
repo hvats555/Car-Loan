@@ -7,6 +7,10 @@ import {collection, addDoc, serverTimestamp} from "firebase/firestore";
 import _ from 'lodash';
 import upload from '../../../utils/upload';
 
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
 function NewBank(props) {
     const bankInitialState = {
         name: '',
@@ -49,14 +53,17 @@ function NewBank(props) {
         <div>
             Add a new bank
 
-            <form onSubmit={saveBankInDb}>    
-                <input type="text" name="name" placeholder="Bank Name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}}/>
-
-                <input type="file" name="file" onChange={(event) => {inputChangeHandler("vehicalBookingGuide", event.target.files[0])}}/>
-
-                <button type="submit">Add bank</button>
+            <form onSubmit={saveBankInDb}>
+                <Grid container rowSpacing={1}>
+                    <Grid item xs={12}>
+                        <TextField label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <input accept=".csv" type="file" name="file" onChange={(event) => {inputChangeHandler("vehicalBookingGuide", event.target.files[0])}}/>
+                    </Grid>
+                    <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
+                </Grid>
             </form>
-
         </div>
     )
 }

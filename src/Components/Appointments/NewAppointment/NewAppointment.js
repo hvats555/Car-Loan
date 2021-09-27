@@ -2,7 +2,10 @@ import {useState} from 'react';
 
 import db from '../../../firebase';
 import {serverTimestamp} from 'firebase/firestore';
-import { query, where, collection, addDoc, getDocs, Timestamp } from "firebase/firestore"; 
+import {collection, addDoc, Timestamp } from "firebase/firestore"; 
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 
 import dayjs from 'dayjs';
 
@@ -53,23 +56,35 @@ function NewAppointment(props) {
         <div>
             <h2>Create New Appointment</h2>
             <form onSubmit={(event) => {saveAppointmentInDb(event)}}>
-                <input type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
 
-                <input type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+            <Grid container spacing={1}>
+                <Grid item xs={6}>
+                    <TextField fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
+                </Grid>
 
-                <input type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>
+                <Grid item xs={6}>
+                    <TextField fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+                </Grid>
 
-                <label for="isTradeInCheckBox">Is Tradein?</label>
-
-                <input id="isTradeInCheckBox" type="checkbox" name="isTradeIn" checked={appointment.isTradeIn} onChange={(event) => {inputChangeHandler("isTradeIn", event.target.checked)}}/>
-
-                <br />
-
-                <input type="date" name="appointmentDate" min={todaysDate()} 
-                onChange={(event) => {inputChangeHandler("appointmentDate", event.target.value)}}
-                value={appointment.appointmentDate} placeholder="Appointment Date" />
-
-                <input type="submit" value="Save Appointment"/>
+                <Grid item xs={6}>
+                    <TextField fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
+                </Grid>
+                
+                <Grid fullWidth item xs={6}>
+                    <TextField 
+                    fullWidth
+                    id="outlined-basic" 
+                    size="small" 
+                    type="date" 
+                    name="appointmentDate" 
+                    min={todaysDate()} 
+                    onChange={(event) => {
+                        inputChangeHandler("appointmentDate", event.target.value)
+                    }}
+                    value={appointment.appointmentDate} placeholder="Appointment Date" />            
+                </Grid>
+            </Grid>
+            <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Save Appointment</Button>
             </form>
         </div>
     )

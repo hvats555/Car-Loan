@@ -4,6 +4,11 @@ import Home from './Containers/Home/Home';
 import AppointmentSingle from './Containers/AppointmentSingle/AppointmentSingle';
 import GoBack from './Components/UI/GoBack/GoBack';
 import Bank from './Containers/Bank/Bank';
+import Navbar from './Components/UI/Navbar/Navbar';
+import SignIn from './Components/Auth/SignIn/SignIn';
+import Layout from './Containers/Layout/Layout';
+
+import { AuthProvider } from './contexts/AuthContext';
 
 import {Route, BrowserRouter as Router, Switch, Link} from 'react-router-dom'
 
@@ -12,20 +17,13 @@ import MyDropzone from './Components/Upload/Inventory';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <ul>
-          <li><Link to="/">Home page</Link></li>
-          <li><Link to="/appointments">Appointments</Link></li>
-          <li><Link to="/banks">Banks</Link></li>
-        </ul>
-
-          <Switch>
-            <Route path="/appointments/:id" component={AppointmentSingle} />
-            <Route path="/appointments" component={Appointment}/>
-            <Route path="/banks" component={Bank} />
-            <Route path="/" component={Home}/>
-          </Switch>
-      </div>
+          <AuthProvider>
+              {console.log(process.env.REACT_APP_CLOUD_FUNCTIONS_URL)}
+              <Switch>
+                <Route path="/signin" component={SignIn} />
+                <Route component={Layout}/>
+              </Switch>
+          </AuthProvider>
     </Router>
   );
 }

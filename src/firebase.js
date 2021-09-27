@@ -1,10 +1,11 @@
 // firebase hosting default is set to public -> make it build
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseApp = initializeApp({
-  apiKey: "AIznaSyANiihfO4QcJjQMNoVoJfnxFW_u-gQDxEE",
+  apiKey: "AIzaSyANiihfO4QcJjQMNoVoJfnxFW_u-gQDxEE",
   authDomain: "cars-development-1f062.firebaseapp.com",
   projectId: "cars-development-1f062",
   storageBucket: "cars-development-1f062.appspot.com",
@@ -13,6 +14,7 @@ const firebaseApp = initializeApp({
 });
 
 const db = getFirestore(firebaseApp);
+export const auth = getAuth();
 
 export default db;
 

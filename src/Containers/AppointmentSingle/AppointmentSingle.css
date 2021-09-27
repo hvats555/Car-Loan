@@ -1,0 +1,17 @@
+.appointmentSingle__info-container {
+  align-items: center;
+}
+
+.appointmentSingle__info {
+}
+
+.appointmentSingle__info > h1 {
+  padding-bottom: 10px;
+  font-size: 25px;
+  line-height: 10px;
+}
+
+.appointmentSingle__info p {
+  color: #597caf;
+  line-height: 10px;
+}

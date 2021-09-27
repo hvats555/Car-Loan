@@ -2,6 +2,16 @@ import React, {useState} from 'react';
 import Modal from '../../UI/Modal/Modal';
 import EditApprovedBanks from '../EditApprovedBanks/EditApprovedBanks';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 function ListApprovedBanks(props) {
     const [approvedBankIndex, setApprovedBankIndex] = useState(null);
     const [approvedBankEditModal, setApprovedBankEditModal] = useState(false);
@@ -13,25 +23,36 @@ function ListApprovedBanks(props) {
     return (
         <div>
             { 
-                props.approvedBanks ? props.approvedBanks.map((approvedBank, index) => (
-                    <div key={index}>
-                        <hr />
-                        <p><strong>Bank Name:</strong> {approvedBank.bankName}</p>
-                        <p><strong>Approval Type:</strong> {approvedBank.approvalType}</p>
-                        <p><strong>Term:</strong> {approvedBank.term} Months</p>
-                        <p><strong>Amount:</strong> ${approvedBank.amount}</p>
-                        <p><strong>Interest Rate:</strong> ${approvedBank.interestRate}</p>
-                        <p><strong>Monthly EMI:</strong> ${approvedBank.monthlyEmi}</p>
-
-                        {/* <button onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}}>Delete (X)</button> */}
-
-                        <button onClick={() => {setApprovedBankIndex(index); approvedBankEditModalHandler(true)}}>Edit</button>
-
-                        <hr />
-                    </div>
-                )) : <p>No approved Banks available</p>
-            }
-
+                props.approvedBanks ?
+                    <Table size="medium">
+                    <TableHead>
+                        <TableRow >
+                            <TableCell>Bank Name:</TableCell>
+                            <TableCell>Term:</TableCell>
+                            <TableCell>Amount:</TableCell>
+                            <TableCell>Interest Rate:</TableCell>
+                            <TableCell>Monthly EMI</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    
+                    <TableBody>
+                    {props.approvedBanks.map((approvedBank, index) => (
+                        <TableRow>
+                                <TableCell>{approvedBank.bankName}</TableCell>
+                                <TableCell>{approvedBank.term}</TableCell>
+                                <TableCell>{approvedBank.amount}</TableCell>
+                                <TableCell>{approvedBank.interestRate}</TableCell>
+                                <TableCell>${approvedBank.monthlyEmi}</TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => {setApprovedBankIndex(index); approvedBankEditModalHandler(true)}}>
+                                        <EditIcon />
+                                    </IconButton>
+                                </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table> : <p>Approved Banks will be displayer here</p>}
 
             {
                 approvedBankEditModal ?

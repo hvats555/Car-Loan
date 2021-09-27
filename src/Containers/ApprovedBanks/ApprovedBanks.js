@@ -4,6 +4,9 @@ import AddApprovedBanks from '../../Components/ApprovedBanks/AddApprovedBanks';
 import ListApprovedBanks from '../../Components/ApprovedBanks/ListApprovedBanks/ListApprovedBanks';
 import CarSearch from '../../Components/CarSearch/CarSearch';
 
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
 import Modal from '../../Components/UI/Modal/Modal';
 
 function ApprovedBanks(props) {
@@ -15,7 +18,15 @@ function ApprovedBanks(props) {
 
     return (
         <div>
-            <button onClick={() => {newApprovedBankModalHandler(true)}}>Add Approved Bank</button>
+            <Grid sx={{alignItems: 'center'}} className="appointmentSingle__info-container" container spacing={2}>
+                <Grid item xs={10}>   
+                    <h3>Approved Banks</h3>
+                </Grid>
+
+                <Grid item xs={2}>              
+                    <Button variant="contained" size="small" onClick={() => {newApprovedBankModalHandler(true)}}>Add New</Button>
+                </Grid>
+            </Grid>
 
             {newApprovedBankModal ? 
                 <Modal modalCloseHandler={() => {newApprovedBankModalHandler(false)}}>

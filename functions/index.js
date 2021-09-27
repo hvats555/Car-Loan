@@ -1,5 +1,4 @@
 const functions = require("firebase-functions");
-const _ = require('lodash');
 const cors = require("cors")({origin: true});
 const cors2 = require('cors');
 const express = require("express")
@@ -23,8 +22,7 @@ app.use(bodyParser.json())
 admin.initializeApp()
 const db = admin.firestore();
 
-const upload_carsInventory = (collection, jsonobjs)=>{
-
+const upload_carsInventory = (collection, jsonobjs) => {
     jsonobjs.forEach(async (element) => {
         await db.collection(collection).add(element);
     });
@@ -37,7 +35,7 @@ const upload_vehicalBookingGuide = async (collection, jsonobjs, bankId) => {
     console.log(bankId);
 
     const bankRef = db.collection(collection).doc(bankId);
-    const res = await bankRef.update({vehicalBookingGuide: jsonobjs});
+    await bankRef.update({vehicalBookingGuide: jsonobjs});
 
     console.log(`Upload completed in ${collection} for bank ${bankId}`);
 }
@@ -131,7 +129,7 @@ app.post('/cars/search', async (req, res) => {
 
 
     for(let i=0; i<approvedBanks.length; i++) {
-        if(approvedBanks[i].bankId == bankId) {
+        if(approvedBanks[i].bankId === bankId) {
             approvedBank = approvedBanks[i];
             break;
         }
@@ -159,7 +157,7 @@ app.post('/cars/search', async (req, res) => {
         let carStatus = {};
 
         for(let i=0; i<vehicalBookingGuide.length; i++) {
-            if(parseInt(vehicalBookingGuide[i].year) == car.year) {
+            if(parseInt(vehicalBookingGuide[i].year) === car.year) {
                 if(car.mileage > vehicalBookingGuide[i].minMileage && car.mileage < vehicalBookingGuide[i].maxMileage) {
                     carStatus = vehicalBookingGuide[i];
                     break;
@@ -168,13 +166,14 @@ app.post('/cars/search', async (req, res) => {
         }
 
         const emi = emiCalculator(car.price, parseInt(approvedBank.interestRate), parseInt(carStatus.maxTerm));
-
+        console.log(emi);
         if(Math.round(emi) <= Math.round(parseInt(approvedBank.monthlyEmi))) {
             console.log(`Adding ${doc.name}`);
             await db.collection('selectedCars').add({
                 car: doc.id,
                 customer: customerId,
-                bank: bankId
+                bank: bankId,
+                calculatedEmi: Math.round(emi)
             });
         }     
     });

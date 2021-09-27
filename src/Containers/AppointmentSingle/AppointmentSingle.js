@@ -11,6 +11,16 @@ import ConfirmationPrompt from '../../Components/ConfirmationPrompt/Confirmation
 
 import ApprovedBanks from '../../Containers/ApprovedBanks/ApprovedBanks';
 
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import './AppointmentSingle.css';
+
+
 import {useHistory} from 'react-router-dom';
 
 function AppointmentDetails({ match }) {
@@ -76,14 +86,36 @@ function AppointmentDetails({ match }) {
 
     return (
         <div>
-            <h3>{appointment.fullName}</h3>
-            <p>{appointment.email} | {appointment.phoneNumber}</p>
-            <p>Trade In: {appointment.isTradeIn}</p>
-            <p><em>Appointment Date: {appointment.appointmentDate}</em></p>
+            <Box sx={{
+                marginBottom: '20px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                '& > :not(style)': {
+                width: "100%",
+                height: "150px",
+            }}}>
 
-            <button onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}}>Delete (X)</button>
+                <Paper sx={{padding: '20px'}} elevation={4}>
+                    <Grid className="appointmentSingle__info-container" container spacing={2}>
+                        <Grid item xs={10}>   
+                            <div class="appointmentSingle__info">
+                                <h1>{appointment.fullName}</h1>
+                                <p>{appointment.email}</p>
+                                <p>{appointment.phoneNumber}</p>
+                            </div>
+                        </Grid>
 
-            <button onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>Edit</button>
+                        <Grid item xs={2}>              
+                            <IconButton onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}} aria-label="delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Box>
 
             <ApprovedBanks customerId={match.params.id} appointment={appointment} />
 
@@ -96,8 +128,8 @@ function AppointmentDetails({ match }) {
                 }
                 
                 {   deleteAppointmentModal ?
-                    <Modal modalCloseHandler={closeDeleteAppointmentModal}>
-                        <ConfirmationPrompt 
+                    <Modal style={{height: "min(30%, 500px)"}}  modalCloseHandler={closeDeleteAppointmentModal}>
+                        <ConfirmationPrompt
                         headline="Are you sure that you want to delete the appointment?"
 
                         yesButtonText="Yes"

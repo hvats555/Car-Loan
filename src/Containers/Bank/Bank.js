@@ -3,6 +3,11 @@ import NewBank from '../../Components/Banks/NewBank/NewBank';
 import ListBanks from '../../Components/Banks/ListBank/ListBank';
 import Modal from '../../Components/UI/Modal/Modal';
 
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
+import './Bank.css';
+
 function Bank() {
     const [newBankModal, setNewBankModal] = useState(false);
 
@@ -11,8 +16,10 @@ function Bank() {
     }
 
     return (
-        <div>
-            <button onClick={() => {newBankModalHandler(true)}}>Add Approved Bank</button>
+        <div className="Bank">
+            <Fab className="createButton" onClick={() => {newBankModalHandler(true)}} color="primary" aria-label="add">
+                <AddIcon />
+            </Fab>
 
             {newBankModal ? 
                 <Modal modalCloseHandler={() => {newBankModalHandler(false)}}>

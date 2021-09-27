@@ -1,0 +1,11 @@
+.confirmationPrompt {
+  text-align: center;
+}
+
+.confirmationPrompt > h3 {
+  text-align: center;
+}
+
+.promptButtons {
+  margin: 0 auto !important;
+}

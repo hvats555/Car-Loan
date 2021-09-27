@@ -11,6 +11,14 @@ import Modal from '../../UI/Modal/Modal';
 import EditAppointment from '../EditAppointment/EditAppointment';
 import ConfirmationPrompt from '../../ConfirmationPrompt/ConfirmationPrompt';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+import './ListAppointments.css';
+
 var _ = require('lodash');
 
 function ListAppointments() {
@@ -86,32 +94,33 @@ function ListAppointments() {
     }
 
     return (
-        <div>
-            <h2>Appointments</h2>
+        <div className="listAppointment">
+            <div className="listAppointment__head">
+                <h2>Appointments</h2>
+                <FilterAppointments appointmentFilterHandler={appointmentFilterHandler}/>
+            </div>
 
-            <FilterAppointments appointmentFilterHandler={appointmentFilterHandler}/>
-
-            {!_.isUndefined(appointments) && appointments.length > 0 ? appointments.map((appointment, index) => (
-                    <div key={index} className="listDiv">
-                        <hr />
-
-                        <Link to={`/appointments/${appointment.id}`}>
-                            <h3>{appointment.fullName}</h3>
-                        </Link>
-
-                        <p>{appointment.email} | {appointment.phoneNumber}</p>
-                        <p>Trade In: {appointment.isTradeIn.toString()}</p>
-                        <p><em>Created at: {appointment.createdAt}</em></p>
-                        <p><em>Appointment Date: {appointment.appointmentDate}</em></p>
-
-                        <button onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}}>Delete (X)</button>
-
-                        <button onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>Edit</button>
-
-                        <hr />
-                    </div>
-            )): <p>No Appointments found on this date, feel free to create one</p>
-            }
+            {!_.isUndefined(appointments) && appointments.length > 0 ? <Table size="medium">
+                <TableHead>
+                    <TableRow >
+                        <TableCell>Name</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Phone Number</TableCell>
+                    </TableRow>
+                </TableHead>
+                
+                <TableBody>
+                {appointments.map((appointment, index) => (
+                    <TableRow className="listAppointment__table-row" key={index} component={Link} to={`/appointments/${appointment.id}`}>
+                            <TableCell>{appointment.fullName}</TableCell>
+                            <TableCell>{appointment.appointmentDate}</TableCell>
+                            <TableCell>{appointment.email}</TableCell>
+                            <TableCell>{appointment.phoneNumber}</TableCell>
+                    </TableRow>
+                ))}
+                </TableBody>
+            </Table>: <p>No Appointments found on this date, feel free to create one</p>}
 
                 {
                     editAppointmentModal ? 

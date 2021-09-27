@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import db from '../../../firebase';
 import { doc, query, where, collection, onSnapshot, orderBy, Timestamp, deleteDoc} from "firebase/firestore"; 
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
 function ListBanks() {
     const [banks, setbanks] = useState([]);
     
@@ -31,15 +37,22 @@ function ListBanks() {
 
     return (
         <div>
-            { 
-                banks ? banks.map((bank) => (
-                    <div key={bank.id}>
-                        <hr />
-                        <p><strong>Bank Name:</strong> {bank.name}</p>
-                        <hr />
-                    </div>
-                )) : <p>No banks available</p>
-            }
+            {banks ? <Table size="medium">
+                <TableHead>
+                    <TableRow >
+                        <TableCell><strong>Bank Name</strong></TableCell>
+                    </TableRow>
+                </TableHead>
+                
+                <TableBody>
+                { banks ? banks.map((bank) => (
+                    <TableRow>
+                        <TableCell key={bank.id}>{bank.name}</TableCell>
+                    </TableRow>
+                    )) : <p>No banks available</p>
+                }
+                </TableBody>
+            </Table>: <p>No Appointments found on this date, feel free to create one</p>}
         </div>
     )
 }
