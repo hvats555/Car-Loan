@@ -9,8 +9,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
-import dayjs from 'dayjs';
-
 function EditAppointment(props) {
     const appointmentInitialState = {
         fullName: '',

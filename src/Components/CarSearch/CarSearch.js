@@ -19,6 +19,8 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+import searchCars from '../../utils/prepareCarSearchResults';
+
 const store = require('store');
 
 // Problem Statement -> Prepare car search results for that bank front end after adding the approved bank 
@@ -44,27 +46,7 @@ function CarSearch(props) {
                 </Grid>
 
                 <Grid item xs={2}> 
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Banks</InputLabel>
-                        <Select
-                            size="small"
-                            id="bankName"
-                            label="Banks"
-                            labelId="demo-simple-select-label"
-                            name="bankName"
-                            onChange={(event) => {
-                                inputChangeHandler(event.target.value);
-                                setSelectedBankId(event.target.value);
-                            }}
-                        >
-
-                        {
-                            props.approvedBanks ? props.approvedBanks.map((bank) => (
-                                <MenuItem key={bank.bankId} value={bank.bankId}>{bank.bankName}</MenuItem>
-                            )) : <MenuItem key='N/A' disabled value="N/A">No banks found</MenuItem>
-                        }
-                        </Select>
-                    </FormControl>
+                    <button onClick={() => {searchCars(props.customerId)}}>Start search</button>
                 </Grid>
             </Grid>
 

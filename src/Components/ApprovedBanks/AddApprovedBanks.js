@@ -23,14 +23,13 @@ function AddApprovedBanks(props) {
         term: null,
         monthlyEmi: null,
         interestRate: null,
-        downPayment: null,
-        tradeIn: null
+        downPayment: 0,
+        tradeIn: 0
     }
 
     const [approvedBank, setApprovedBank] = useState(initialApprovedBankState);
     const [banks, setBanks] = useState([]);
-    const [profitMargin, setProfitMargin] = useState(3000);
-
+    const [profitMargin, setProfitMargin] = useState(0);
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -117,7 +116,7 @@ function AddApprovedBanks(props) {
                         <TextField label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
                     </Grid>
 
-                    <Grid fullWidth item xs={12}>
+                    {/* <Grid fullWidth item xs={12}>
                         <TextField label="Profit Margin" fullWidth id="outlined-basic" size="small" type="number" name="term" value={profitMargin} onChange={(event) => {setProfitMargin(event.target.value)}} />
                     </Grid>
 
@@ -129,7 +128,7 @@ function AddApprovedBanks(props) {
 
                     <Grid fullWidth item xs={12}>
                         <TextField label="Trade In Value" fullWidth id="outlined-basic" size="small" type="number" name="tradeIn" value={approvedBank.tradeIn} onChange={(event) => {inputChangeHandler("tradeIn", event.target.value)}} />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
 
                 <Button sx={{margin: '20px 0'}} type="submit" variant="contained">Add Bank</Button>

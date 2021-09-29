@@ -1,8 +1,7 @@
 import axios from "axios"
 
 const upload = (options) => {
-    const url = process.env.REACT_APP_CLOUD_FUNCTIONS_URL + options.endpoint;
-
+    const url = process.env.REACT_APP_API_URL + "/upload";
     const fd = new FormData()
     fd.append("file" , options.file);
 
