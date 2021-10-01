@@ -38,7 +38,7 @@ function ListApprovedBanks(props) {
                     
                     <TableBody>
                     {props.approvedBanks.map((approvedBank, index) => (
-                        <TableRow>
+                        <TableRow key={approvedBank.bankId}>
                                 <TableCell>{approvedBank.bankName}</TableCell>
                                 <TableCell>{approvedBank.term}</TableCell>
                                 <TableCell>{approvedBank.amount}</TableCell>
@@ -57,7 +57,7 @@ function ListApprovedBanks(props) {
             {
                 approvedBankEditModal ?
                 <Modal modalCloseHandler={() => {approvedBankEditModalHandler(false)}}>
-                    <EditApprovedBanks fetchCarSearchResults={props.fetchCarSearchResults} setCars={props.setCars} fetchCarSearchResults={props.fetchCarSearchResults} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
+                    <EditApprovedBanks searchResultsHandler={props.searchResultsHandler} fetchCarSearchResults={props.fetchCarSearchResults} setCars={props.setCars} fetchCarSearchResults={props.fetchCarSearchResults} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
                 </Modal> : null
             }
 

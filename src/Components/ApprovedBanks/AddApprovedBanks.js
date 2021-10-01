@@ -62,7 +62,7 @@ function AddApprovedBanks(props) {
 
         console.log(approvedBank);
 
-        prepareCarSearchResults(props.customerId, approvedBank.bankId, profitMargin);
+        props.searchResultsHandler();
     }
 
     const inputChangeHandler = (key, value) => {

@@ -15,6 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+const _ = require('lodash');
+
 function EditApprovedBanks(props) {
     const initialApprovedBankState = {
         bankId: '',
@@ -34,7 +36,7 @@ function EditApprovedBanks(props) {
     useEffect(() => {
         const fetchBanks = async () => {
             const querySnapshot = await getDocs(collection(db, "banks"));
-            const banksArray = []
+            const banksArray = [];
             querySnapshot.forEach((doc) => {
                 banksArray.push({
                     id: doc.id,
@@ -53,35 +55,36 @@ function EditApprovedBanks(props) {
 
         const approvedBankRef = doc(db, "customers", props.customerId);
 
-        // remove from state
+        let objectToDelete = props.approvedBank;
+        if(!_.isUndefined(props.approvedBank.foundCount)) {
+            objectToDelete = _.omit(props.approvedBank, ['foundCount', 'calculatedEmi']);
+        }
+
+        let objectToAdd = approvedBank;
+        if(!_.isUndefined(approvedBank.foundCount)) {
+            objectToAdd = _.omit(approvedBank, ['foundCount', 'calculatedEmi']);
+        }
+        
+        console.log("Object to delete", objectToDelete);
 
         await updateDoc(approvedBankRef, {
-            approvedBanks: arrayRemove(props.approvedBank)
+            approvedBanks: arrayRemove(objectToDelete)
         });
 
+
         await updateDoc(approvedBankRef, {
-            approvedBanks: arrayUnion(approvedBank)
+            approvedBanks: arrayUnion(objectToAdd)
         });
 
         setApprovedBank(initialApprovedBankState);
         props.modalCloseHandler();
+        props.searchResultsHandler();
 
         // store.remove(props.approvedBank.bankId);
-        props.setCars([]);
-        prepareCarSearchResults(props.customerId, approvedBank.bankId, profitMargin);
-        props.fetchCarSearchResults(props.customerId, props.approvedBank.bankId);
     }
 
     const inputChangeHandler = (key, value) => {
         setApprovedBank({...approvedBank, [key]: value});
-    }
-
-    const bankInputHandler = (index) => {
-        setApprovedBank({
-            ...approvedBank,
-            bankId: banks[index].id,
-            bankName: banks[index].name
-        });
     }
 
     return ( 
@@ -99,20 +102,6 @@ function EditApprovedBanks(props) {
                     
                     <Grid fullWidth item xs={12}>
                         <TextField label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
-                    </Grid>
-
-                    <Grid fullWidth item xs={12}>
-                        <TextField label="Profit Margin" fullWidth id="outlined-basic" size="small" type="number" name="term" value={profitMargin} onChange={(event) => {setProfitMargin(event.target.value)}} />
-                    </Grid>
-
-
-                    <Grid fullWidth item xs={12}>
-                        <TextField label="Down Payment" label="Down payment" fullWidth id="outlined-basic" size="small" type="number" name="downPayment" value={approvedBank.downPayment} onChange={(event) => {inputChangeHandler("downPayment", event.target.value)}} />
-                    </Grid>
-
-
-                    <Grid fullWidth item xs={12}>
-                        <TextField label="Trade In Value" fullWidth id="outlined-basic" size="small" type="number" name="tradeIn" value={approvedBank.tradeIn} onChange={(event) => {inputChangeHandler("tradeIn", event.target.value)}} />
                     </Grid>
                 </Grid>
 

@@ -3,9 +3,7 @@ import { useState } from 'react';
 import AddApprovedBanks from '../../Components/ApprovedBanks/AddApprovedBanks';
 import ListApprovedBanks from '../../Components/ApprovedBanks/ListApprovedBanks/ListApprovedBanks';
 import CarSearch from '../../Components/CarSearch/CarSearch';
-
-import { collection, query, where, getDocs,FieldPath, documentId, getDoc, doc, limit, document, startAfter, orderBy } from "firebase/firestore";
-import db from '../../firebase';
+import axios from 'axios';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -14,109 +12,67 @@ import Modal from '../../Components/UI/Modal/Modal';
 // import store from 'store';
 
 function ApprovedBanks(props) {
+    const limit = 25;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
-    const [lastVisibleDocument, setLastVisibleDocument] = useState({});
-    const [cars, setCars] = useState([]);
+    
+    const [searchResults, setSearchResults] = useState({});
+
     const [carSearchLoading, setCarSearchLoading] = useState(false);
     const [moreCarSearchLoading, setMoreCarSearchLoading] = useState(false);
     const [isCarEmpty, setIsCarsEmpty] = useState(false);
 
-    const carStateHandler = (value) => {
-        setCars(value);
+    const [carSearchOptions, setCarSearchOptions] = useState({
+        customerId: props.customerId,
+        profitAmount: 3000,
+        downPayment: 0,
+        tradeInValue: 0,
+        termExtension: 0,
+        interestBreak: 0
+    });
+
+    const carSearchOptionsHandler = (key, value) => {
+        setCarSearchOptions({...carSearchOptions, [key]: value});
+    }
+
+    const searchResultsHandler = () => {
+        const url = process.env.REACT_APP_API_URL + `/cars/search?limit=${limit}`;
+        setCarSearchLoading(true);
+
+        axios.post(url, carSearchOptions).then((result) => {
+            console.log(result.data);
+            setSearchResults(result.data);
+            setCarSearchLoading(false);
+        }).catch((err) => {
+            setCarSearchLoading(false);
+            console.log(err);
+        })
+    }
+
+    const searchMoreResultsHandler = () => {
+        const url = process.env.REACT_APP_API_URL + `/cars/search?limit=${limit}&startAfter=${searchResults.lastDocRef}`;
+        setMoreCarSearchLoading(true);
+
+        axios.post(url, {
+            customerId: props.customerId,
+        }).then((result) => {
+            console.log("New result: ", result);
+            console.log("Old search results: ", searchResults);
+
+            const concatedResult = searchResults.result.concat(result.data.result);
+
+            setSearchResults({
+                result: concatedResult,
+                lastDocRef: result.data.lastDocRef
+            });
+            setMoreCarSearchLoading(false);
+        }).catch((err) => {
+            setMoreCarSearchLoading(false);
+            console.log(err);
+        })
     }
 
     const newApprovedBankModalHandler = (state) => {
         setNewApprovedBankModal(state);
-    }
-
-    const fetchCarSearchResults = async (customerId, bankId) => {
-        const tempCarIds = [];
-        console.log("fetching car search results ...")
-        setCarSearchLoading(true);
-
-        const q = query(collection(db, "selectedCars"), where('customer', '==', customerId), where('bank', '==', bankId), orderBy('calculatedEmi'), limit(2));
-
-        const querySnapshot = await getDocs(q);
-
-        if(querySnapshot.size === 0) {
-            setIsCarsEmpty(true);
-        }
-
-        // Get the last visible document
-        const lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
-        setLastVisibleDocument(lastVisible);        
-        // get 25 at once
-        // get last doc refrence -> save in state
-
-        const carsArray = [];
-
-        querySnapshot.forEach((d) => {
-            tempCarIds.push({car: d.data().car, calculatedEmi: d.data().calculatedEmi});
-        });
-
-        for(const tempCarId of tempCarIds) {
-            const docRef = doc(db, "carsInventory", tempCarId.car);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                carsArray.push({details: docSnap.data(), calculatedEmi: tempCarId.calculatedEmi});
-            }
-        }
-
-        setCars(carsArray);
-
-        // if(store.get(bankId)) {
-        //     store.remove(bankId);
-        // } 
-
-        // store.set(bankId, carsArray);
-
-        setCarSearchLoading(false);
-        console.log("Finished Car search resuls");
-    }
-
-    const fetchMoreCarSearchResults = async (customerId, bankId) => {
-        setMoreCarSearchLoading(true);
-        const tempCarIds = [];
-        console.log("fetching more car search results ...")
-
-        const q = query(collection(db, "selectedCars"), where('customer', '==', customerId), where('bank', '==', bankId), orderBy('calculatedEmi'), limit(25), startAfter(lastVisibleDocument));
-
-        const querySnapshot = await getDocs(q);
-
-        if(querySnapshot.size === 0) {
-            setIsCarsEmpty(true);
-        }
-
-        // Get the last visible document
-        const lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
-        setLastVisibleDocument(lastVisible);    
-
-        const carsArray = [];
-
-        querySnapshot.forEach((d) => {
-            tempCarIds.push({car: d.data().car, calculatedEmi: d.data().calculatedEmi});
-        });
-
-        for(const tempCarId of tempCarIds) {
-            const docRef = doc(db, "carsInventory", tempCarId.car);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                carsArray.push({details: docSnap.data(), calculatedEmi: tempCarId.calculatedEmi});
-            }
-        }
-
-        const newCarArray = cars.concat(carsArray);
-        setCars(newCarArray);
-
-        // if(store.get(bankId)) {
-        //     store.remove(bankId);
-        // } 
-
-        // store.set(bankId, carsArray);
-        console.log("Finished more Car search resuls");
-        setMoreCarSearchLoading(false);
     }
 
     return (
@@ -133,12 +89,12 @@ function ApprovedBanks(props) {
 
             {newApprovedBankModal ? 
                 <Modal modalCloseHandler={() => {newApprovedBankModalHandler(false)}}>
-                    <AddApprovedBanks modalCloseHandler={() => {newApprovedBankModalHandler(false)}} customerId={props.customerId} />
+                    <AddApprovedBanks searchResultsHandler={searchResultsHandler} modalCloseHandler={() => {newApprovedBankModalHandler(false)}} customerId={props.customerId} />
                 </Modal> : null
             }
-            <ListApprovedBanks fetchCarSearchResults={fetchCarSearchResults} setCars={carStateHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
+            <ListApprovedBanks searchResultsHandler={searchResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
 
-            <CarSearch moreCarSearchLoading={moreCarSearchLoading} isCarEmpty={isCarEmpty} fetchMoreCarSearchResults={fetchMoreCarSearchResults} carSearchLoading={carSearchLoading} fetchCarSearchResults={fetchCarSearchResults} cars={cars} setCars={carStateHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
+            <CarSearch carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
         </div>
     )
 }

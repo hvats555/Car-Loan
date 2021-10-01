@@ -98,7 +98,7 @@ function AppointmentDetails({ match }) {
                 <Paper sx={{padding: '20px'}} elevation={4}>
                     <Grid className="appointmentSingle__info-container" container spacing={2}>
                         <Grid item xs={10}>   
-                            <div class="appointmentSingle__info">
+                            <div className="appointmentSingle__info">
                                 <h1>{appointment.fullName}</h1>
                                 <p>{appointment.email}</p>
                                 <p>{appointment.phoneNumber}</p>

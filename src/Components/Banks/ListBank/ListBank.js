@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 import db from '../../../firebase';
-import { doc, query, where, collection, onSnapshot, orderBy, Timestamp, deleteDoc} from "firebase/firestore"; 
+import { query, collection, onSnapshot, orderBy} from "firebase/firestore"; 
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

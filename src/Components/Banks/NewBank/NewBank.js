@@ -33,15 +33,7 @@ function NewBank(props) {
         const bankRes = await addDoc(collection(db, "banks"), _.omit(bank, ['vehicalBookingGuide']));
 
         if(bank.vehicalBookingGuide) {
-            upload({
-                file: bank.vehicalBookingGuide,
-                endpoint: '/upload',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'x-upload-collection': 'banks',
-                    'x-bankid': bankRes.id
-                }
-            });
+            upload(bank.vehicalBookingGuide, bankRes.id);
         }
 
         // reset appointment state

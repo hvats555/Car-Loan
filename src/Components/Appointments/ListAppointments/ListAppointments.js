@@ -26,12 +26,10 @@ function ListAppointments() {
     
     const [deleteAppointmentModal, setDeleteAppointmentModal] = useState(false);
 
-    const openDeleteAppointmentModal = () => setDeleteAppointmentModal(true);
     const closeDeleteAppointmentModal = () => setDeleteAppointmentModal(false);
 
     const [editAppointmentModal, setEditAppointmentModal] = useState(false);
 
-    const openEditAppointmentModal = () => setEditAppointmentModal(true);
     const closeEditAppointmentModal = () => setEditAppointmentModal(false);
 
     const [editAppointmentId, setEditAppointmentId] = useState('');
@@ -112,11 +110,12 @@ function ListAppointments() {
                 
                 <TableBody>
                 {appointments.map((appointment, index) => (
-                    <TableRow className="listAppointment__table-row" key={index} component={Link} to={`/appointments/${appointment.id}`}>
-                            <TableCell>{appointment.fullName}</TableCell>
-                            <TableCell>{appointment.appointmentDate}</TableCell>
-                            <TableCell>{appointment.email}</TableCell>
-                            <TableCell>{appointment.phoneNumber}</TableCell>
+                    <TableRow className="listAppointment__table-row" key={index} >
+                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.fullName}
+                            </TableCell>
+                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell>
+                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.email}</TableCell>
+                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.phoneNumber}</TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
