@@ -7,7 +7,7 @@ const upload = (file, bankId) => {
 
     axios.post(url, fd, {
         headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data'
         }
     }).then((result) => {
         console.log("Upload result: ", result);

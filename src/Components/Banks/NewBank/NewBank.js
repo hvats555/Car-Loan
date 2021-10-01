@@ -94,7 +94,7 @@ function NewBank(props) {
                         label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({"vehicalBookingGuide": acceptedFiles[0]})}}>   
+                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({...bank, 'vehicalBookingGuide': acceptedFiles[0]})}}>   
                             {({getRootProps, getInputProps, isDragActive}) => (
                                 <section>
                                     <div class="dropZoneBorder" {...getRootProps()}>
