@@ -4,6 +4,8 @@ import Appointment from '../Appointment/Appointment';
 import Home from '../../Containers/Home/Home';
 import AppointmentSingle from '../../Containers/AppointmentSingle/AppointmentSingle';
 import Bank from '../../Containers/Bank/Bank';
+import Inventory from '../../Containers/Inventory/Inventory'
+
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -244,6 +246,7 @@ export default function MiniDrawer() {
         <PrivateRoute exact path="/appointments/:id" component={AppointmentSingle} />
         <PrivateRoute exact path="/appointments" component={Appointment}/>
         <PrivateRoute exact path="/banks" component={Bank} />
+        <PrivateRoute exact path="/inventory" component={Inventory} />
         <PrivateRoute exact path="/" component={Appointment}/>
       </Box>
     </Box>

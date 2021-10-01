@@ -1,0 +1,7 @@
+.dropZoneBorder {
+  border-radius: 0.5rem;
+  text-align: center;
+  border: 1px dotted grey;
+  margin-top: 1rem;
+  padding: 1rem;
+}

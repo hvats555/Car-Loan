@@ -1,0 +1,10 @@
+.Inventory {
+  position: relative;
+  height: 80vh;
+}
+
+.createButton {
+  position: fixed !important;
+  right: 3%;
+  bottom: 5%;
+}

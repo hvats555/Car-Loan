@@ -11,6 +11,11 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
+import Dropzone from 'react-dropzone'
+
+import './NewBank.css';
+
+
 function NewBank(props) {
     const bankInitialState = {
         name: '',
@@ -52,6 +57,22 @@ function NewBank(props) {
                     </Grid>
                     <Grid item xs={12}>
                         <input accept=".csv" type="file" name="file" onChange={(event) => {inputChangeHandler("vehicalBookingGuide", event.target.files[0])}}/>
+
+                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({"vehicalBookingGuide": acceptedFiles[0]})}}>
+                            
+                            {({getRootProps, getInputProps, isDragActive}) => (
+                                <section>
+                                    <div class="dropZoneBorder" {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        {
+                                            bank.vehicalBookingGuide && !isDragActive ? <p>{bank.vehicalBookingGuide.name}</p> : <p>Drag 'n' drop some files here, or click to select files</p>
+                                        }
+    
+                                        {isDragActive ? <p>Drop files here</p>: null}                                   
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
                     </Grid>
                     <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
                 </Grid>

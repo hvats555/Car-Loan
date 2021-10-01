@@ -1,0 +1,15 @@
+/*List Appointment table styling*/
+
+.listInventory {
+  height: 100%;
+}
+
+.listAppointment__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listAppointment__table-row:hover {
+  background-color: #ece9e9;
+}
