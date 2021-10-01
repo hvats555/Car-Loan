@@ -27,9 +27,66 @@ function AddApprovedBanks(props) {
         tradeIn: 0
     }
 
+    const validationInitialState = {
+        bankName: {
+            isError: false,
+            errorText: ''
+        },
+        amount: {
+            isError: false,
+            errorText: ''
+        },
+
+        interestRate: {
+            isError: false,
+            errorText: ''
+        },
+
+        term: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
     const [approvedBank, setApprovedBank] = useState(initialApprovedBankState);
     const [banks, setBanks] = useState([]);
     const [profitMargin, setProfitMargin] = useState(0);
+
+    const handleValidation = () => {
+      const fields = approvedBank;
+      let errors = {...validationErrors};
+      let formIsValid = true;
+      
+      // Cannot be empty
+      if(!fields['bankName']){
+        formIsValid = false;
+        errors.bankName['isError'] = !formIsValid;
+        errors.bankName['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['amount']){
+        formIsValid = false;
+        errors.amount['isError'] = !formIsValid;
+        errors.amount['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['interestRate']){
+        formIsValid = false;
+        errors.interestRate['isError'] = !formIsValid;
+        errors.interestRate['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['term']){
+          formIsValid = false;
+          errors.term['isError'] = !formIsValid;
+          errors.term['errorText'] = 'Cannot be empty';
+      }
+  
+      setValidationErrors(errors);
+      return formIsValid;
+    }
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -49,20 +106,21 @@ function AddApprovedBanks(props) {
     const saveApprovedBankInDb = async (event) => {
         event.preventDefault();
         
-        approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
+        if(handleValidation()) {
+            approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
 
-        const approvedBankRef = doc(db, "customers", props.customerId);
-
-        await updateDoc(approvedBankRef, {
-            approvedBanks: arrayUnion(approvedBank)
-        });
-
-        setApprovedBank(initialApprovedBankState);
-        props.modalCloseHandler();
-
-        console.log(approvedBank);
-
-        props.searchResultsHandler();
+            const approvedBankRef = doc(db, "customers", props.customerId);
+    
+            await updateDoc(approvedBankRef, {
+                approvedBanks: arrayUnion(approvedBank)
+            });
+    
+            setApprovedBank(initialApprovedBankState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
+        
+            props.searchResultsHandler();
+        }
     }
 
     const inputChangeHandler = (key, value) => {
@@ -85,6 +143,9 @@ function AddApprovedBanks(props) {
                     <Grid item xs={12}>
                         <InputLabel id="bankName-label">Bank</InputLabel>
                         <Select
+                            errorState={validationErrors.bankName.isError}
+                            helperText={validationErrors.bankName.errorText}
+
                             placeholder="Banks"
                             fullWidth
                             size="small"
@@ -105,15 +166,30 @@ function AddApprovedBanks(props) {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField fullWidth id="outlined-basic" size="small" type="number" name="interestRate" label="Interest Rate" value={approvedBank.interestRate} onChange={(event) => {inputChangeHandler("interestRate", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.interestRate.isError}
+                        helperText={validationErrors.interestRate.errorText}
+
+                        fullWidth id="outlined-basic" size="small" type="number" name="interestRate" label="Interest Rate" value={approvedBank.interestRate} onChange={(event) => {inputChangeHandler("interestRate", event.target.value)}} />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Loan Amount" size="small" type="number" name="amount" value={approvedBank.amount} onChange={(event) => {inputChangeHandler("amount", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.amount.isError}
+                        helperText={validationErrors.amount.errorText}
+
+                        fullWidth id="outlined-basic" label="Loan Amount" size="small" type="number" name="amount" value={approvedBank.amount} onChange={(event) => {inputChangeHandler("amount", event.target.value)}} />
                     </Grid>
                     
                     <Grid fullWidth item xs={12}>
-                        <TextField label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
+                        <TextField 
+                        
+                        errorState={validationErrors.term.isError}
+                        helperText={validationErrors.term.errorText}
+                        
+                        label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
                     </Grid>
 
                     {/* <Grid fullWidth item xs={12}>

@@ -20,6 +20,70 @@ function EditAppointment(props) {
 
     const [appointment, setAppointment] = useState(appointmentInitialState);
 
+    const validationInitialState = {
+        fullName: {
+            isError: false,
+            errorText: ''
+        },
+        phoneNumber: {
+            isError: false,
+            errorText: ''
+        },
+        email: {
+            isError: false,
+            errorText: ''
+        },
+
+        appointmentDate: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
+    const handleValidation = () => {
+        const fields = appointment;
+        let errors = {...validationErrors};
+        let formIsValid = true;
+        
+        // Cannot be empty
+        if(!fields['fullName']){
+            formIsValid = false;
+            errors.fullName['isError'] = !formIsValid;
+            errors.fullName['errorText'] = 'Cannot be empty';
+        }
+
+        if(!fields['phoneNumber']){
+            formIsValid = false;
+            errors.phoneNumber['isError'] = !formIsValid;
+            errors.phoneNumber['errorText'] = 'Cannot be empty';
+        }
+
+        if(fields['phoneNumber']){
+
+            if(fields['phoneNumber'].toString().length != 10)
+            formIsValid = false;
+            errors.phoneNumber['isError'] = !formIsValid;
+            errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';
+            }
+
+        if(!fields['email']){
+            formIsValid = false;
+            errors.email['isError'] = !formIsValid;
+            errors.email['errorText'] = 'Cannot be empty';
+        }
+
+        if(!fields['appointmentDate']){
+            formIsValid = false;
+            errors.appointmentDate['isError'] = !formIsValid;
+            errors.appointmentDate['errorText'] = 'Cannot be empty';
+        }
+
+        setValidationErrors(errors);
+        return formIsValid;
+    }
+
     useEffect(() => {
         const fetchAppointments = async (id) => {
             const docRef = doc(db, "customers", id);
@@ -50,14 +114,14 @@ function EditAppointment(props) {
 
     const updateAppointment = async (event) => {
         event.preventDefault();
-        // date is converted from YYYY-MM-DD format to firebase timestamp before saving to db
-        appointment.appointmentDate = Timestamp.fromDate(new Date(appointment.appointmentDate));
 
-        await setDoc(doc(db, "customers", props.id), appointment);
-
-        // reset appointment state
-        setAppointment(appointmentInitialState);
-        props.modalCloseHandler();
+        if(handleValidation()){
+            appointment.appointmentDate = Timestamp.fromDate(new Date(appointment.appointmentDate));
+            await setDoc(doc(db, "customers", props.id), appointment);
+            setAppointment(appointmentInitialState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
+        }
     }
 
     const todaysDate = () => {
@@ -70,19 +134,30 @@ function EditAppointment(props) {
             <form onSubmit={(event) => {updateAppointment(event)}}>
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
-                        <TextField fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
+                        <TextField 
+                        errorState={validationErrors.fullName.isError}
+                        helperText={validationErrors.fullName.errorText}
+                        fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
                     </Grid>
 
                     <Grid item xs={6}>
-                        <TextField fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+                        <TextField 
+                        errorState={validationErrors.phoneNumber.isError}
+                        helperText={validationErrors.phoneNumber.errorText}
+                        fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
                     </Grid>
 
                     <Grid item xs={6}>
-                        <TextField fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
+                        <TextField 
+                        errorState={validationErrors.email.isError}
+                        helperText={validationErrors.email.errorText}
+                        fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
                     </Grid>
                     
                     <Grid fullWidth item xs={6}>
                         <TextField 
+                        errorState={validationErrors.appointmentDate.isError}
+                        helperText={validationErrors.appointmentDate.errorText}
                         fullWidth
                         id="outlined-basic" 
                         size="small" 

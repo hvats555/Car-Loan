@@ -27,20 +27,56 @@ function NewBank(props) {
         setBank({...bank, [key]: value})
     }
 
+    const validationInitialState = {
+        name: {
+            isError: false,
+            errorText: ''
+        },
+
+        vehicalBookingGuide: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
+    const handleValidation = () => {
+        const fields = bank;
+        let errors = {...validationErrors};
+        let formIsValid = true;
+        
+        // Cannot be empty
+        if(!fields['name']){
+          formIsValid = false;
+          errors.name['isError'] = !formIsValid;
+          errors.name['errorText'] = 'Cannot be empty';
+        }
+  
+        if(!fields['vehicalBookingGuide']){
+          formIsValid = false;
+          errors.vehicalBookingGuide['isError'] = !formIsValid;
+          errors.vehicalBookingGuide['errorText'] = 'Please upload vehical booking guide';
+        }
+    
+        setValidationErrors(errors);
+        return formIsValid;
+      }
+
+
     const saveBankInDb = async (event) => {
         event.preventDefault();
-
-        bank.createdAt = serverTimestamp();
-
-        const bankRes = await addDoc(collection(db, "banks"), _.omit(bank, ['vehicalBookingGuide']));
-
-        if(bank.vehicalBookingGuide) {
-            upload(bank.vehicalBookingGuide, bankRes.id);
+        if(handleValidation()) {
+            bank.createdAt = serverTimestamp();
+            const bankRes = await addDoc(collection(db, "banks"), _.omit(bank, ['vehicalBookingGuide']));
+            if(bank.vehicalBookingGuide) {
+                upload(bank.vehicalBookingGuide, bankRes.id);
+            }
+    
+            setBank(bankInitialState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
         }
-
-        // reset appointment state
-        setBank(bankInitialState);
-        props.modalCloseHandler();
     }
 
     return (
@@ -50,7 +86,12 @@ function NewBank(props) {
             <form onSubmit={saveBankInDb}>
                 <Grid container rowSpacing={1}>
                     <Grid item xs={12}>
-                        <TextField label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.name.isError}
+                        helperText={validationErrors.name.errorText}
+                        
+                        label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
                     </Grid>
                     <Grid item xs={12}>
                         <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({"vehicalBookingGuide": acceptedFiles[0]})}}>   
@@ -66,7 +107,10 @@ function NewBank(props) {
                                     </div>
                                 </section>
                             )}
+
                         </Dropzone>
+                        {validationErrors.vehicalBookingGuide.isError ? 
+                         <p>{validationErrors.vehicalBookingGuide.errorText}</p>: null}
                     </Grid>
                     <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
                 </Grid>

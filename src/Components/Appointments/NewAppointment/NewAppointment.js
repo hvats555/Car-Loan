@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 
 import dayjs from 'dayjs';
 
+import validateEmail from '../../../utils/validateEmail';
+
 function NewAppointment(props) {
     const todaysDate = () => {
         return dayjs().format('YYYY-MM-DD');
@@ -23,7 +25,69 @@ function NewAppointment(props) {
         approvedBanks: []
     }
 
+    const validationInitialState = {
+        fullName: {
+            isError: false,
+            errorText: ''
+        },
+        phoneNumber: {
+            isError: false,
+            errorText: ''
+        },
+        email: {
+            isError: false,
+            errorText: ''
+        },
+
+        appointmentDate: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
     const [appointment, setAppointment] = useState(appointmentInitialState);
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
+      const handleValidation = () => {
+        const fields = appointment;
+        let errors = {...validationErrors};
+        let formIsValid = true;
+        
+        // Cannot be empty
+        if(!fields['fullName']){
+          formIsValid = false;
+          errors.fullName['isError'] = !formIsValid;
+          errors.fullName['errorText'] = 'Cannot be empty';
+        }
+  
+        if(!fields['phoneNumber']){
+          formIsValid = false;
+          errors.phoneNumber['isError'] = !formIsValid;
+          errors.phoneNumber['errorText'] = 'Cannot be empty';
+        }
+
+        if(fields['phoneNumber']){
+            if(fields['phoneNumber'].length != 10)
+            formIsValid = false;
+            errors.phoneNumber['isError'] = !formIsValid;
+            errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';
+          }
+  
+        if(!fields['email']){
+          formIsValid = false;
+          errors.email['isError'] = !formIsValid;
+          errors.email['errorText'] = 'Cannot be empty';
+        }
+
+        if(!fields['appointmentDate']){
+            formIsValid = false;
+            errors.appointmentDate['isError'] = !formIsValid;
+            errors.appointmentDate['errorText'] = 'Cannot be empty';
+        }
+    
+        setValidationErrors(errors);
+        return formIsValid;
+      }
 
     const inputChangeHandler = (key, value) => {
         setAppointment({...appointment, [key]: value})
@@ -32,24 +96,16 @@ function NewAppointment(props) {
     const saveAppointmentInDb = async (event) => {
         event.preventDefault();
 
-        // const q = query(collection(db, "customers"), where("email", "==", appointment.email));
-        // const querySnapshot = await getDocs(q);
-
-        // ! for development only
-        // if(!_.isUndefined(querySnapshot.doc)) {
-        if(true){
+        if(handleValidation()) {
             appointment.createdAt = serverTimestamp();
-            // date is converted from YYYY-MM-DD format to firebase timestamp before saving to db
             appointment.appointmentDate = Timestamp.fromDate(new Date(appointment.appointmentDate));
-
+    
             await addDoc(collection(db, "customers"), appointment);
-        } else {
-            console.log("Customer with email already exist in database");
+    
+            setAppointment(appointmentInitialState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
         }
-
-        // reset appointment state
-        setAppointment(appointmentInitialState);
-        props.modalCloseHandler();
     }
 
     return (
@@ -59,19 +115,37 @@ function NewAppointment(props) {
 
             <Grid container spacing={1}>
                 <Grid item xs={6}>
-                    <TextField fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
+                    <TextField
+                    errorState={validationErrors.fullName.isError}
+                    helperText={validationErrors.fullName.errorText}
+
+                    fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+                    <TextField
+                    type="number"
+                    errorState={validationErrors.phoneNumber.isError}
+                    helperText={validationErrors.phoneNumber.errorText}
+
+                    fullWidth id="outlined-basic" size="small" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
+                    <TextField
+                    
+                    errorState={validationErrors.email.isError}
+                    helperText={validationErrors.email.errorText}
+
+                    fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
                 </Grid>
                 
                 <Grid fullWidth item xs={6}>
                     <TextField 
+
+                    errorState={validationErrors.appointmentDate.isError}
+                    helperText={validationErrors.appointmentDate.errorText}
+
                     fullWidth
                     id="outlined-basic" 
                     size="small" 

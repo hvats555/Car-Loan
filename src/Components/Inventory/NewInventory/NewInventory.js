@@ -28,11 +28,38 @@ function Newinventory(props) {
     const saveinventoryInDb = async (event) => {
         event.preventDefault();
 
-        uploadInventory(inventory.file)
-
-        setinventory(inventoryInitialState);
-        props.modalCloseHandler();
+        if(handleValidation()) {
+            uploadInventory(inventory.file)
+    
+            setinventory(inventoryInitialState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
+        }
     }
+
+    const validationInitialState = {
+        file: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
+    const handleValidation = () => {
+        const fields = inventory;
+        let errors = {...validationErrors};
+        let formIsValid = true;
+        
+        if(!fields['file']){
+          formIsValid = false;
+          errors.file['isError'] = !formIsValid;
+          errors.file['errorText'] = 'Please upload the inventory file';
+        }
+    
+        setValidationErrors(errors);
+        return formIsValid;
+      }
 
     return (
         <div>
@@ -56,6 +83,8 @@ function Newinventory(props) {
                             </section>
                         )}
                         </Dropzone>
+                        {validationErrors.file.isError ? 
+                         <p>{validationErrors.file.errorText}</p>: null}
                     </Grid>
                     <Button sx={{marginTop: '20px'}} type="submit" size="medium" variant="contained">Add to Inventory</Button>
                 </Grid>

@@ -10,11 +10,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
 const _ = require('lodash');
 
 function EditApprovedBanks(props) {
@@ -32,6 +27,54 @@ function EditApprovedBanks(props) {
     const [approvedBank, setApprovedBank] = useState(props.approvedBank);
     const [profitMargin, setProfitMargin] = useState(3000);
     const [banks, setBanks] = useState([]);
+
+
+    const validationInitialState = {
+        amount: {
+            isError: false,
+            errorText: ''
+        },
+
+        interestRate: {
+            isError: false,
+            errorText: ''
+        },
+
+        term: {
+            isError: false,
+            errorText: ''
+        }
+    }
+
+    const [validationErrors, setValidationErrors] = useState(validationInitialState);
+
+
+    const handleValidation = () => {
+      const fields = approvedBank;
+      let errors = {...validationErrors};
+      let formIsValid = true;
+      
+      if(!fields['amount']){
+        formIsValid = false;
+        errors.amount['isError'] = !formIsValid;
+        errors.amount['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['interestRate']){
+        formIsValid = false;
+        errors.interestRate['isError'] = !formIsValid;
+        errors.interestRate['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['term']){
+          formIsValid = false;
+          errors.term['isError'] = !formIsValid;
+          errors.term['errorText'] = 'Cannot be empty';
+      }
+  
+      setValidationErrors(errors);
+      return formIsValid;
+    }
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -51,36 +94,38 @@ function EditApprovedBanks(props) {
     const saveApprovedBankInDb = async (event) => {
         event.preventDefault();
         
-        approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
+        if(handleValidation()) {
+            approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
 
-        const approvedBankRef = doc(db, "customers", props.customerId);
-
-        let objectToDelete = props.approvedBank;
-        if(!_.isUndefined(props.approvedBank.foundCount)) {
-            objectToDelete = _.omit(props.approvedBank, ['foundCount', 'calculatedEmi']);
+            const approvedBankRef = doc(db, "customers", props.customerId);
+    
+            let objectToDelete = props.approvedBank;
+            if(!_.isUndefined(props.approvedBank.foundCount)) {
+                objectToDelete = _.omit(props.approvedBank, ['foundCount', 'calculatedEmi']);
+            }
+    
+            let objectToAdd = approvedBank;
+            if(!_.isUndefined(approvedBank.foundCount)) {
+                objectToAdd = _.omit(approvedBank, ['foundCount', 'calculatedEmi']);
+            }
+            
+            console.log("Object to delete", objectToDelete);
+    
+            await updateDoc(approvedBankRef, {
+                approvedBanks: arrayRemove(objectToDelete)
+            });
+    
+    
+            await updateDoc(approvedBankRef, {
+                approvedBanks: arrayUnion(objectToAdd)
+            });
+    
+            setApprovedBank(initialApprovedBankState);
+            setValidationErrors(validationInitialState);
+            props.modalCloseHandler();
+            props.searchResultsHandler();
         }
-
-        let objectToAdd = approvedBank;
-        if(!_.isUndefined(approvedBank.foundCount)) {
-            objectToAdd = _.omit(approvedBank, ['foundCount', 'calculatedEmi']);
-        }
-        
-        console.log("Object to delete", objectToDelete);
-
-        await updateDoc(approvedBankRef, {
-            approvedBanks: arrayRemove(objectToDelete)
-        });
-
-
-        await updateDoc(approvedBankRef, {
-            approvedBanks: arrayUnion(objectToAdd)
-        });
-
-        setApprovedBank(initialApprovedBankState);
-        props.modalCloseHandler();
-        props.searchResultsHandler();
-
-        // store.remove(props.approvedBank.bankId);
+       
     }
 
     const inputChangeHandler = (key, value) => {
@@ -93,15 +138,30 @@ function EditApprovedBanks(props) {
             <form onSubmit={(event) => {saveApprovedBankInDb(event)}}>
                 <Grid container rowSpacing={1} spacing={1}>
                     <Grid item xs={12}>
-                        <TextField fullWidth id="outlined-basic" size="small" type="number" name="interestRate" label="Interest Rate" value={approvedBank.interestRate} onChange={(event) => {inputChangeHandler("interestRate", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.interestRate.isError}
+                        helperText={validationErrors.interestRate.errorText}
+
+                        fullWidth id="outlined-basic" size="small" type="number" name="interestRate" label="Interest Rate" value={approvedBank.interestRate} onChange={(event) => {inputChangeHandler("interestRate", event.target.value)}} />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Loan Amount" size="small" type="number" name="amount" value={approvedBank.amount} onChange={(event) => {inputChangeHandler("amount", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.amount.isError}
+                        helperText={validationErrors.amount.errorText}
+
+                        fullWidth id="outlined-basic" label="Loan Amount" size="small" type="number" name="amount" value={approvedBank.amount} onChange={(event) => {inputChangeHandler("amount", event.target.value)}} />
                     </Grid>
                     
                     <Grid fullWidth item xs={12}>
-                        <TextField label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
+                        <TextField
+                        
+                        errorState={validationErrors.term.isError}
+                        helperText={validationErrors.term.errorText}
+                        
+                        label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
                     </Grid>
                 </Grid>
 
