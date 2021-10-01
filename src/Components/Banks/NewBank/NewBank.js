@@ -15,7 +15,6 @@ import Dropzone from 'react-dropzone'
 
 import './NewBank.css';
 
-
 function NewBank(props) {
     const bankInitialState = {
         name: '',
@@ -27,8 +26,6 @@ function NewBank(props) {
     const inputChangeHandler = (key, value) => {
         setBank({...bank, [key]: value})
     }
-
-
 
     const saveBankInDb = async (event) => {
         event.preventDefault();
@@ -56,10 +53,7 @@ function NewBank(props) {
                         <TextField label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
                     </Grid>
                     <Grid item xs={12}>
-                        <input accept=".csv" type="file" name="file" onChange={(event) => {inputChangeHandler("vehicalBookingGuide", event.target.files[0])}}/>
-
-                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({"vehicalBookingGuide": acceptedFiles[0]})}}>
-                            
+                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({"vehicalBookingGuide": acceptedFiles[0]})}}>   
                             {({getRootProps, getInputProps, isDragActive}) => (
                                 <section>
                                     <div class="dropZoneBorder" {...getRootProps()}>
