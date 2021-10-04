@@ -93,55 +93,58 @@ function ListAppointments() {
 
     return (
         <div className="listAppointment">
-            <div className="listAppointment__head">
+            <div className="appHeader">
                 <h2>Appointments</h2>
                 <FilterAppointments appointmentFilterHandler={appointmentFilterHandler}/>
             </div>
 
-            {!_.isUndefined(appointments) && appointments.length > 0 ? <Table size="medium">
-                <TableHead>
-                    <TableRow >
-                        <TableCell>Name</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Phone Number</TableCell>
-                    </TableRow>
-                </TableHead>
+            <div class="tableContainer">
+                {!_.isUndefined(appointments) && appointments.length > 0 ? <Table size="medium">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Name</strong></TableCell>
+                            {/* <TableCell>Date</TableCell> */}
+                            <TableCell sx={{textAlign: 'center'}}><strong>Email</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Phone Number</strong></TableCell>
+                        </TableRow>
+                    </TableHead>
                 
-                <TableBody>
-                {appointments.map((appointment, index) => (
-                    <TableRow className="listAppointment__table-row" key={index} >
-                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.fullName}
-                            </TableCell>
-                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell>
-                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.email}</TableCell>
-                            <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.phoneNumber}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>: <p>No Appointments found on this date, feel free to create one</p>}
-
-                {
-                    editAppointmentModal ? 
-                    <Modal modalCloseHandler={closeEditAppointmentModal}>
-                        <EditAppointment id={editAppointmentId} modalCloseHandler={closeEditAppointmentModal}/>
-                    </Modal>
-                    : null
-                }
-                {   deleteAppointmentModal ?
-                    <Modal modalCloseHandler={closeDeleteAppointmentModal}>
-                        <ConfirmationPrompt 
-                        headline="Are you sure that you want to delete the appointment?"
-
-                        yesButtonText="Yes"
-                        yesButtonHandler={() => {appointmentDeleteHandler(deleteAppointmentId)}}
-
-                        noButtonText="No"
-                        noButtonHandler={closeDeleteAppointmentModal}
-                        />
-                    </Modal> 
-                    :null
-                }
+                    <TableBody>
+                    {appointments.map((appointment, index) => (
+                        <TableRow className="listAppointment__table-row" key={index} >
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>{appointment.fullName}
+                                </TableCell>
+                                {/* <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell> */}
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>
+                                    {appointment.email ? appointment.email : 'N/A'}
+                                </TableCell>
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>
+                                    {appointment.phoneNumber ? appointment.phoneNumber : 'N/A'}
+                                </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>: <p>No Appointments found on this date, feel free to create one</p>}
+                    {
+                        editAppointmentModal ?
+                        <Modal modalCloseHandler={closeEditAppointmentModal}>
+                            <EditAppointment id={editAppointmentId} modalCloseHandler={closeEditAppointmentModal}/>
+                        </Modal>
+                        : null
+                    }
+                    {   deleteAppointmentModal ?
+                        <Modal modalCloseHandler={closeDeleteAppointmentModal}>
+                            <ConfirmationPrompt
+                            headline="Are you sure that you want to delete the appointment?"
+                            yesButtonText="Yes"
+                            yesButtonHandler={() => {appointmentDeleteHandler(deleteAppointmentId)}}
+                            noButtonText="No"
+                            noButtonHandler={closeDeleteAppointmentModal}
+                            />
+                        </Modal>
+                        :null
+                    }
+            </div>
         </div>
     )
 }

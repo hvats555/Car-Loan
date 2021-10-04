@@ -9,13 +9,16 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+
 function EditAppointment(props) {
     const appointmentInitialState = {
         fullName: '',
         phoneNumber: '',
         email: '',
-        isTradeIn: false,
-        appointmentDate: ''
+        appointmentDate: '',
+        taxExemption: false
     }
 
     const [appointment, setAppointment] = useState(appointmentInitialState);
@@ -54,25 +57,24 @@ function EditAppointment(props) {
             errors.fullName['errorText'] = 'Cannot be empty';
         }
 
-        if(!fields['phoneNumber']){
-            formIsValid = false;
-            errors.phoneNumber['isError'] = !formIsValid;
-            errors.phoneNumber['errorText'] = 'Cannot be empty';
-        }
+        // if(!fields['phoneNumber']){
+        //     formIsValid = false;
+        //     errors.phoneNumber['isError'] = !formIsValid;
+        //     errors.phoneNumber['errorText'] = 'Cannot be empty';
+        // }
 
         if(fields['phoneNumber']){
-
             if(fields['phoneNumber'].toString().length != 10)
             formIsValid = false;
             errors.phoneNumber['isError'] = !formIsValid;
             errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';
-            }
-
-        if(!fields['email']){
-            formIsValid = false;
-            errors.email['isError'] = !formIsValid;
-            errors.email['errorText'] = 'Cannot be empty';
         }
+
+        // if(!fields['email']){
+        //     formIsValid = false;
+        //     errors.email['isError'] = !formIsValid;
+        //     errors.email['errorText'] = 'Cannot be empty';
+        // }
 
         if(!fields['appointmentDate']){
             formIsValid = false;
@@ -95,7 +97,7 @@ function EditAppointment(props) {
                 fullName: docSnap.data().fullName,
                 phoneNumber: docSnap.data().phoneNumber,
                 email: docSnap.data().email,
-                isTradeIn: docSnap.data().isTradeIn,
+                taxExemption: docSnap.data().taxExemption.toString(),
                 createdAt: new Date(docSnap.data().createdAt.seconds * 1000).toString(),
                 appointmentDate: new Date(docSnap.data().appointmentDate.seconds * 1000).toString(),
             })
@@ -130,31 +132,31 @@ function EditAppointment(props) {
 
     return (
         <div>
-            <h2>Edit Appointment</h2>
+            <h2>Edit Credit Application</h2>
             <form onSubmit={(event) => {updateAppointment(event)}}>
-                <Grid container spacing={1}>
-                    <Grid item xs={6}>
+                <Grid container spacing={1} rowSpacing={{xs: 1}}>
+                    <Grid item md={6} xs={12}>
                         <TextField 
                         errorState={validationErrors.fullName.isError}
                         helperText={validationErrors.fullName.errorText}
                         fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={12}>
                         <TextField 
                         errorState={validationErrors.phoneNumber.isError}
                         helperText={validationErrors.phoneNumber.errorText}
-                        fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+                        fullWidth id="outlined-basic" size="small" type="text" name="phoneNumber" placeholder="Phone Number (Optional)" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={12}>
                         <TextField 
                         errorState={validationErrors.email.isError}
                         helperText={validationErrors.email.errorText}
-                        fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
+                        fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email (Optional)" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
                     </Grid>
                     
-                    <Grid fullWidth item xs={6}>
+                    <Grid fullWidth item md={6} xs={12}>
                         <TextField 
                         errorState={validationErrors.appointmentDate.isError}
                         helperText={validationErrors.appointmentDate.errorText}
@@ -169,8 +171,13 @@ function EditAppointment(props) {
                         }}
                         value={appointment.appointmentDate} placeholder="Appointment Date" />            
                     </Grid>
+
+                    <Grid fullWidth item md={6} xs={12}>
+                        <FormControlLabel control={<Checkbox checked={appointment.taxExemption} onChange={(event) => {inputChangeHandler("taxExemption", event.target.checked)
+                        }}/>} label="Tax Exempt" />  
+                    </Grid>
                 </Grid>
-                 <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Save Appointment</Button>
+                 <Button fullWidth sx={{marginTop: '20px'}} type="submit" variant="contained">Save</Button>
             </form>
         </div>
     )

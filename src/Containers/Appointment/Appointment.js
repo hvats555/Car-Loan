@@ -13,24 +13,16 @@ import './Appointment.css';
 function Appointment() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const modalCloseHandler = () => {
-        setIsModalOpen(false);
-    }
-
-    const modalOpenHandler = () => {
-        setIsModalOpen(true);
-    }   
-
     return (
         <div className="Appointment">
 
-            <Fab className="createButton" onClick={modalOpenHandler} color="primary" aria-label="add">
+            <Fab className="createButton" onClick={() => {setIsModalOpen(true)}} color="primary" aria-label="add">
                 <AddIcon />
             </Fab>
 
             {isModalOpen ? 
-            <Modal modalCloseHandler={modalCloseHandler}>
-                <NewAppointment modalCloseHandler={modalCloseHandler} />
+            <Modal modalCloseHandler={() => {setIsModalOpen(false)}}>
+                <NewAppointment modalCloseHandler={() => {setIsModalOpen(false)}} />
             </Modal> : null}
 
             <ListAppointments />

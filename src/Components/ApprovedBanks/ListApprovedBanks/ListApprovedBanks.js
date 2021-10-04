@@ -21,30 +21,30 @@ function ListApprovedBanks(props) {
     }
 
     return (
-        <div>
+        <div className="tableContainer">
             { 
                 props.approvedBanks ?
                     <Table size="medium">
                     <TableHead>
                         <TableRow >
-                            <TableCell>Bank Name:</TableCell>
-                            <TableCell>Term:</TableCell>
-                            <TableCell>Amount:</TableCell>
-                            <TableCell>Interest Rate:</TableCell>
-                            <TableCell>Monthly EMI</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Bank Name</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Term of Borrowing</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Amount Financed</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Annual Interest Rate</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Installment Payment/Month</strong></TableCell>
+                            <TableCell sx={{textAlign: 'center'}}><strong>Actions</strong></TableCell>
                         </TableRow>
                     </TableHead>
                     
                     <TableBody>
                     {props.approvedBanks.map((approvedBank, index) => (
                         <TableRow key={approvedBank.bankId}>
-                                <TableCell>{approvedBank.bankName}</TableCell>
-                                <TableCell>{approvedBank.term}</TableCell>
-                                <TableCell>{approvedBank.amount}</TableCell>
-                                <TableCell>{approvedBank.interestRate}</TableCell>
-                                <TableCell>${approvedBank.monthlyEmi}</TableCell>
-                                <TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.bankName}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.term}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.amount}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.interestRate}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>${approvedBank.monthlyEmi}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>
                                     <IconButton onClick={() => {setApprovedBankIndex(index); approvedBankEditModalHandler(true)}}>
                                         <EditIcon />
                                     </IconButton>

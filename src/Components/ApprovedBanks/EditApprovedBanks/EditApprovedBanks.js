@@ -2,7 +2,6 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import { doc, updateDoc, arrayUnion, getDocs, collection, arrayRemove } from "firebase/firestore"; 
 import calculateEmi from '../../../utils/calculateEmi';
-import prepareCarSearchResults from '../../../utils/prepareCarSearchResults';
 import db from '../../../firebase';
 // import store from 'store';
 
@@ -165,7 +164,7 @@ function EditApprovedBanks(props) {
                     </Grid>
                 </Grid>
 
-                <Button sx={{margin: '20px 0'}} type="submit" variant="contained">Update Bank</Button>
+                <Button fullWidth sx={{margin: '20px 0'}} type="submit" variant="contained">Update Bank</Button>
             </form>
         </div>
     )

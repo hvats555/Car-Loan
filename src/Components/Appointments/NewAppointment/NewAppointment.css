@@ -1,0 +1,6 @@
+@media only screen and (max-width: 560px) {
+  .newAppointment > h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+}

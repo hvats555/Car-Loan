@@ -11,8 +11,6 @@ import ConfirmationPrompt from '../../Components/ConfirmationPrompt/Confirmation
 
 import ApprovedBanks from '../../Containers/ApprovedBanks/ApprovedBanks';
 
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -30,7 +28,7 @@ function AppointmentDetails({ match }) {
         fullName: '',
         phoneNumber: '',
         email: '',
-        isTradeIn: false,
+        taxExemption: false,
         appointmentDate: todaysDate()
     }
 
@@ -59,7 +57,7 @@ function AppointmentDetails({ match }) {
                         fullName: doc.data().fullName,
                         phoneNumber: doc.data().phoneNumber,
                         email: doc.data().email,
-                        isTradeIn: doc.data().isTradeIn.toString(),
+                        taxExemption: doc.data().taxExemption.toString(),
                         createdAt: new Date(doc.data().createdAt.seconds * 1000).toString(),
                         appointmentDate: new Date(doc.data().appointmentDate.seconds * 1000).toString(),
                         approvedBanks: doc.data().approvedBanks
@@ -95,26 +93,23 @@ function AppointmentDetails({ match }) {
                 height: "150px",
             }}}>
 
-                <Paper sx={{padding: '20px'}} elevation={4}>
-                    <Grid className="appointmentSingle__info-container" container spacing={2}>
-                        <Grid item xs={10}>   
-                            <div className="appointmentSingle__info">
-                                <h1>{appointment.fullName}</h1>
-                                <p>{appointment.email}</p>
-                                <p>{appointment.phoneNumber}</p>
-                            </div>
-                        </Grid>
+                <div className="userInfo">
+                    <div className="appointmentSingle__info">
+                        <h1>{appointment.fullName}</h1>
+                        <p>{appointment.email}</p>
+                        <p>{appointment.phoneNumber}</p>
+                        <p>Tax Exemption: {appointment.taxExemption}</p>
+                    </div>
 
-                        <Grid item xs={2}>              
-                            <IconButton onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}} aria-label="delete">
-                                <DeleteIcon />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                </Paper>
+                    <div>              
+                        <IconButton onClick={() => {openEditAppointmentModal(); setEditAppointmentId(appointment.id)}}>
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={() => {openDeleteAppointmentModal(); setDeleteAppointmentId(appointment.id)}} aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>
+                </div>
             </Box>
 
             <ApprovedBanks customerId={match.params.id} appointment={appointment} />
@@ -126,11 +121,11 @@ function AppointmentDetails({ match }) {
                     </Modal>
                     : null
                 }
-                
+                {console.log(window.innerWidth)}
                 {   deleteAppointmentModal ?
-                    <Modal style={{height: "min(30%, 500px)"}}  modalCloseHandler={closeDeleteAppointmentModal}>
+                    <Modal style={{height: window.innerWidth <520 ? "min(50%, 500px)" : "min(30%, 500px)"}}  modalCloseHandler={closeDeleteAppointmentModal}>
                         <ConfirmationPrompt
-                        headline="Are you sure that you want to delete the appointment?"
+                        headline="Are you sure that you want to delete this credit application?"
 
                         yesButtonText="Yes"
                         yesButtonHandler={() => {appointmentDeleteHandler(deleteAppointmentId)}}

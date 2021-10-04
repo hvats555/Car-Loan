@@ -112,7 +112,7 @@ function NewBank(props) {
                         {validationErrors.vehicalBookingGuide.isError ? 
                          <p>{validationErrors.vehicalBookingGuide.errorText}</p>: null}
                     </Grid>
-                    <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
+                    <Button fullWidth sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
                 </Grid>
             </form>
         </div>

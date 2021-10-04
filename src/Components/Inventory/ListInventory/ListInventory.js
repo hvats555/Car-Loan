@@ -2,13 +2,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import db from '../../../firebase';
-import { doc, query, where, collection, onSnapshot, orderBy, Timestamp, deleteDoc} from "firebase/firestore"; 
-
-import {Link} from 'react-router-dom';
-
-import Modal from '../../UI/Modal/Modal';
-import EditInventory from '../EditInventory/EditInventory';
-import ConfirmationPrompt from '../../ConfirmationPrompt/ConfirmationPrompt';
+import {query, collection, onSnapshot} from "firebase/firestore"; 
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

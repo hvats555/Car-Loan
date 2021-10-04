@@ -39,26 +39,29 @@ function SearchResultsTable(props) {
 
 
     return (
-        <div>
+        <div className="tableContainer">
              <Table size="medium">
-                <TableHead>
-                    <TableRow >
-                            <TableCell align="center" colSpan={5}><strong>Car Details</strong></TableCell>
-                            <TableCell align="center" colSpan={2}><strong>Banks</strong></TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell><strong>Image</strong></TableCell>
-                        <TableCell><strong>Title</strong></TableCell>
-                        <TableCell><strong>Stock Number</strong></TableCell>
-                        <TableCell><strong>VIN</strong></TableCell>
-
-                        {props.approvedBanks ? props.approvedBanks.map((bank, index) => (
-                            <TableCell key={bank.bankId}><strong>{bank.bankName} / {bank.monthlyEmi}</strong></TableCell>
-                        )) : null }
-
-                    </TableRow>
-                </TableHead>
+                 {
+                     props.searchResults && !_.isEmpty(props.searchResults) ?
+                     <TableHead>
+                        <TableRow >
+                                <TableCell align="center" colSpan={5}><strong>Car Details</strong></TableCell>
+                                <TableCell align="center" colSpan={2}><strong>Banks</strong></TableCell>
+                        </TableRow>
+    
+                        <TableRow>
+                            <TableCell><strong>Image</strong></TableCell>
+                            <TableCell><strong>Title</strong></TableCell>
+                            <TableCell><strong>Stock Number</strong></TableCell>
+                            <TableCell><strong>VIN</strong></TableCell>
+    
+                            {props.approvedBanks ? props.approvedBanks.map((bank, index) => (
+                                <TableCell key={bank.bankId}><strong>{bank.bankName} / {bank.monthlyEmi}</strong></TableCell>
+                            )) : null }
+    
+                        </TableRow>
+                    </TableHead> : <p>Search Results will be displayed here</p>
+                 }
                 
                 {!props.carSearchLoading ? <TableBody>
                     {props.searchResults && !_.isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
@@ -66,7 +69,7 @@ function SearchResultsTable(props) {
                             <TableCell>
                                 <CardMedia
                                 component="img"
-                                sx={{ width: 100, height: 100, borderRadius:'50%', display: { xs: 'none', sm: 'block' } }}
+                                sx={{ width: 100, height: 100, borderRadius:'50%', display: {sm: 'block' } }}
                                 image={results.car.coverImage}/>
                             </TableCell>
                             <TableCell>{results.car.name}</TableCell>

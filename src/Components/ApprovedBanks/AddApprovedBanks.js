@@ -207,7 +207,7 @@ function AddApprovedBanks(props) {
                     </Grid> */}
                 </Grid>
 
-                <Button sx={{margin: '20px 0'}} type="submit" variant="contained">Add Bank</Button>
+                <Button fullWidth  sx={{margin: '20px 0'}} type="submit" variant="contained">Add Bank</Button>
 
             </form>
         </div>

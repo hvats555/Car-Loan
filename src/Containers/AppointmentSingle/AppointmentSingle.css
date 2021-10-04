@@ -2,9 +2,6 @@
   align-items: center;
 }
 
-.appointmentSingle__info {
-}
-
 .appointmentSingle__info > h1 {
   padding-bottom: 10px;
   font-size: 25px;
@@ -14,4 +11,31 @@
 .appointmentSingle__info p {
   color: #597caf;
   line-height: 10px;
+}
+
+@media only screen and (max-width: 520px) {
+  .appointmentSingle__info > h1 {
+    text-align: center;
+  }
+  .appointmentSingle__info p {
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
+/* User info */
+.userInfo {
+  padding: 2rem;
+  border: 2px solid #ececec;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media only screen and (max-width: 520px) {
+  .userInfo {
+    height: fit-content !important;
+    flex-direction: column;
+  }
 }

@@ -7,9 +7,14 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+
 import dayjs from 'dayjs';
 
 import validateEmail from '../../../utils/validateEmail';
+
+import './NewAppointment.css';
 
 function NewAppointment(props) {
     const todaysDate = () => {
@@ -20,7 +25,7 @@ function NewAppointment(props) {
         fullName: '',
         phoneNumber: '',
         email: '',
-        isTradeIn: false,
+        taxExemption: false,
         appointmentDate: todaysDate(),
         approvedBanks: []
     }
@@ -60,24 +65,12 @@ function NewAppointment(props) {
           errors.fullName['errorText'] = 'Cannot be empty';
         }
   
-        if(!fields['phoneNumber']){
-          formIsValid = false;
-          errors.phoneNumber['isError'] = !formIsValid;
-          errors.phoneNumber['errorText'] = 'Cannot be empty';
-        }
-
         if(fields['phoneNumber']){
             if(fields['phoneNumber'].length != 10)
             formIsValid = false;
             errors.phoneNumber['isError'] = !formIsValid;
             errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';
           }
-  
-        if(!fields['email']){
-          formIsValid = false;
-          errors.email['isError'] = !formIsValid;
-          errors.email['errorText'] = 'Cannot be empty';
-        }
 
         if(!fields['appointmentDate']){
             formIsValid = false;
@@ -109,12 +102,12 @@ function NewAppointment(props) {
     }
 
     return (
-        <div>
-            <h2>Create New Appointment</h2>
+        <div className="newAppointment">
+            <h2>Add Credit Application</h2>
             <form onSubmit={(event) => {saveAppointmentInDb(event)}}>
 
-            <Grid container spacing={1}>
-                <Grid item xs={6}>
+            <Grid container spacing={1} rowSpacing={{xs: 1}}>
+                <Grid item md={6} xs={12}>
                     <TextField
                     errorState={validationErrors.fullName.isError}
                     helperText={validationErrors.fullName.errorText}
@@ -122,30 +115,29 @@ function NewAppointment(props) {
                     fullWidth id="outlined-basic" size="small" type="text" name="fullName" placeholder="Full Name" value={appointment.fullName} onChange={(event) => {inputChangeHandler("fullName", event.target.value)}} />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item md={6} xs={12}>
                     <TextField
                     type="number"
                     errorState={validationErrors.phoneNumber.isError}
                     helperText={validationErrors.phoneNumber.errorText}
 
-                    fullWidth id="outlined-basic" size="small" name="phoneNumber" placeholder="Phone Number" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
+                    fullWidth id="outlined-basic" size="small" name="phoneNumber" placeholder="Phone Number (Optional)" value={appointment.phoneNumber} onChange={(event) => {inputChangeHandler("phoneNumber", event.target.value)}} />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item md={6} xs={12}>
                     <TextField
                     
                     errorState={validationErrors.email.isError}
                     helperText={validationErrors.email.errorText}
 
-                    fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
+                    fullWidth id="outlined-basic" size="small" type="email" name="email" placeholder="Email (Optional)" value={appointment.email} onChange={(event) => {inputChangeHandler("email", event.target.value)}}/>            
                 </Grid>
                 
-                <Grid fullWidth item xs={6}>
+                <Grid sx={{marginTop: '.5rem'}} md={6} xs={12}>
                     <TextField 
 
                     errorState={validationErrors.appointmentDate.isError}
                     helperText={validationErrors.appointmentDate.errorText}
-
                     fullWidth
                     id="outlined-basic" 
                     size="small" 
@@ -157,8 +149,14 @@ function NewAppointment(props) {
                     }}
                     value={appointment.appointmentDate} placeholder="Appointment Date" />            
                 </Grid>
+
+                <Grid fullWidth item md={6} xs={12}>
+                    <FormControlLabel control={<Checkbox onChange={(event) => {inputChangeHandler("taxExemption", event.target.checked)
+                    }}/>} label="Tax Exempt" />  
+                </Grid>
+                
             </Grid>
-            <Button sx={{marginTop: '20px'}} type="submit" variant="contained">Save Appointment</Button>
+            <Button fullWidth sx={{marginTop: '20px'}} type="submit" variant="contained">Save</Button>
             </form>
         </div>
     )

@@ -86,7 +86,7 @@ function Newinventory(props) {
                         {validationErrors.file.isError ? 
                          <p>{validationErrors.file.errorText}</p>: null}
                     </Grid>
-                    <Button sx={{marginTop: '20px'}} type="submit" size="medium" variant="contained">Add to Inventory</Button>
+                    <Button fullWidth sx={{marginTop: '20px'}} type="submit" size="medium" variant="contained">Add to Inventory</Button>
                 </Grid>
             </form>
         </div>
