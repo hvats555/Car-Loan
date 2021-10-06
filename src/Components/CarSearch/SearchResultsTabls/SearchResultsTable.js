@@ -33,7 +33,6 @@ function SearchResultsTable(props) {
                 }
             }        
         }
-        console.log("Approved bank answer", approvedBank);
         return approvedBank;
     }
 
@@ -45,15 +44,24 @@ function SearchResultsTable(props) {
                      props.searchResults && !_.isEmpty(props.searchResults) ?
                      <TableHead>
                         <TableRow >
-                                <TableCell align="center" colSpan={5}><strong>Car Details</strong></TableCell>
-                                <TableCell align="center" colSpan={2}><strong>Banks</strong></TableCell>
+                                <TableCell align="center" colSpan={8}><strong>Car Details</strong></TableCell>
+                                <TableCell align="center" colSpan={4}><strong>Banks</strong></TableCell>
                         </TableRow>
     
                         <TableRow>
-                            <TableCell><strong>Image</strong></TableCell>
-                            <TableCell><strong>Title</strong></TableCell>
-                            <TableCell><strong>Stock Number</strong></TableCell>
-                            <TableCell><strong>VIN</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>Image</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>Title</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>Stock Number</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>VIN</strong></TableCell>
+
+                            <TableCell style={{textAlign: 'center'}}><strong>Mileage</strong></TableCell>
+
+                            <TableCell style={{textAlign: 'center'}}><strong>Age</strong></TableCell>
+
+                            <TableCell style={{textAlign: 'center'}}><strong>Insurance Claim</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>Insurance Claim (Others)</strong></TableCell>
+                            <TableCell style={{textAlign: 'center'}}><strong>Other Damage</strong></TableCell>
+
     
                             {props.approvedBanks ? props.approvedBanks.map((bank, index) => (
                                 <TableCell key={bank.bankId}><strong>{bank.bankName} / {bank.monthlyEmi}</strong></TableCell>
@@ -66,16 +74,22 @@ function SearchResultsTable(props) {
                 {!props.carSearchLoading ? <TableBody>
                     {props.searchResults && !_.isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
                         <TableRow key={index}>
-                            <TableCell>
+                            <TableCell style={{textAlign: 'center'}}>
                                 <CardMedia
                                 component="img"
-                                sx={{ width: 100, height: 100, borderRadius:'50%', display: {sm: 'block' } }}
+                                sx={{ width: 70, height: 70, borderRadius:'50%', display: {sm: 'block' } }}
                                 image={results.car.coverImage}/>
                             </TableCell>
-                            <TableCell>{results.car.name}</TableCell>
-                            <TableCell>{results.car.stockNumber}</TableCell>
-                            <TableCell>{results.car.vin}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.name}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.stockNumber}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.vin}</TableCell>
 
+                            <TableCell style={{textAlign: 'center'}}>{results.car.mileage}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.age}</TableCell>
+
+                            <TableCell style={{textAlign: 'center'}}>{results.car.numberOfAccidents}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.notes}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.totalDamage}</TableCell>
                         {
                             func(props.approvedBanks, results.bank).map((b) => {
                                 if(b.foundCount) {

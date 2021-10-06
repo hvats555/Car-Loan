@@ -62,6 +62,28 @@ function ListAppointments() {
 
     }, []);
 
+
+    const searchCustomers = (input) => {
+        const q = query(collection(db, "customers"), orderBy('fullName'), where('fullName', '>=', input), where('fullName', '<=', input + "\uf8ff"));
+
+        onSnapshot(q, (querySnapshot) => {
+            const appointments = [];
+            querySnapshot.forEach((doc) => {
+                const object = {
+                    id: doc.id,
+                    fullName: doc.data().fullName,
+                    phoneNumber: doc.data().phoneNumber,
+                    email: doc.data().email,
+                    isTradeIn: doc.data().isTradeIn,
+                    createdAt: doc.data().createdAt && new Date(doc.data().createdAt.seconds * 1000).toString(),
+                    appointmentDate: doc.data().appointmentDate && new Date(doc.data().appointmentDate.seconds * 1000).toString(),
+                }
+                appointments.push(object);
+            });
+            setAppointments(appointments);
+        });
+    }
+
     const appointmentFilterHandler = (value) => {
         const timestamp = Timestamp.fromDate(new Date(value));
 
@@ -97,6 +119,8 @@ function ListAppointments() {
                 <h2>Appointments</h2>
                 <FilterAppointments appointmentFilterHandler={appointmentFilterHandler}/>
             </div>
+
+            <input onChange={(event) => {searchCustomers(event.target.value)}} placeholder="Search"></input>
 
             <div class="tableContainer">
                 {!_.isUndefined(appointments) && appointments.length > 0 ? <Table size="medium">

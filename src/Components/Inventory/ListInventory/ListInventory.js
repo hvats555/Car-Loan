@@ -49,27 +49,29 @@ function ListInventory() {
                 <h2>Inventory</h2>
             </div>
 
-            {!_.isUndefined(Inventory) && Inventory.length > 0 ? <Table size="medium">
-                <TableHead>
-                    <TableRow >
-                        <TableCell>Name</TableCell>
-                        <TableCell>Make</TableCell>
-                        <TableCell>Mileage</TableCell>
-                        <TableCell>Cost</TableCell>
-                    </TableRow>
-                </TableHead>
+            <div class="tableContainer">
+                {!_.isUndefined(Inventory) && Inventory.length > 0 ? <Table size="medium">
+                    <TableHead>
+                        <TableRow >
+                            <TableCell>Name</TableCell>
+                            <TableCell>Make</TableCell>
+                            <TableCell>Mileage</TableCell>
+                            <TableCell>Cost</TableCell>
+                        </TableRow>
+                    </TableHead>
                 
-                <TableBody>
-                {Inventory.map((Inventory, index) => (
-                    <TableRow className="listInventory__table-row" key={index} >
-                            <TableCell>{Inventory.name}</TableCell>
-                            <TableCell>{Inventory.make}</TableCell>
-                            <TableCell>{Inventory.mileage}</TableCell>
-                            <TableCell>{Inventory.cost}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>: <p>Nothing found in inventory</p>}
+                    <TableBody>
+                    {Inventory.map((Inventory, index) => (
+                        <TableRow className="listInventory__table-row" key={index} >
+                                <TableCell>{Inventory.name}</TableCell>
+                                <TableCell>{Inventory.make}</TableCell>
+                                <TableCell>{Inventory.mileage}</TableCell>
+                                <TableCell>{Inventory.cost}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>: <p>Nothing found in inventory</p>}
+            </div>
         </div>
     )
 }

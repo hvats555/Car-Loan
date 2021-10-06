@@ -9,10 +9,9 @@ import Button from '@mui/material/Button';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import toast from 'react-hot-toast';
 
 import dayjs from 'dayjs';
-
-import validateEmail from '../../../utils/validateEmail';
 
 import './NewAppointment.css';
 
@@ -98,7 +97,9 @@ function NewAppointment(props) {
             setAppointment(appointmentInitialState);
             setValidationErrors(validationInitialState);
             props.modalCloseHandler();
+            toast.success("Application Created");
         }
+
     }
 
     return (

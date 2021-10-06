@@ -22,21 +22,40 @@ import Home from '../../Containers/Home/Home';
 import AppointmentSingle from '../../Containers/AppointmentSingle/AppointmentSingle';
 import Bank from '../../Containers/Bank/Bank';
 import Inventory from '../../Containers/Inventory/Inventory';
+import MenuItem from '@mui/material/MenuItem';
+
+import Menu from '@mui/material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
+import { useAuth } from '../../contexts/AuthContext';
+
+
 
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
+  const {currentUser, logout} = useAuth();
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const drawer = (
@@ -91,7 +110,7 @@ function ResponsiveDrawer(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -107,11 +126,47 @@ function ResponsiveDrawer(props) {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
+
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            CarJutsu
-          </Typography>
+
+            <Typography variant="h6" noWrap component="div">
+              CarJutsu
+            </Typography>
+            
+            {currentUser ? <div style={{display: 'flex', alignItems: 'center'}}>
+              
+              <Typography noWrap component="div" sx={{ flexGrow: 1 }}>
+                {currentUser.email}
+              </Typography>
+              <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={() => {handleClose(); logout()}}>Signout</MenuItem>
+                </Menu>
+              </div>: null}
         </Toolbar>
       </AppBar>
       <Box
@@ -119,14 +174,13 @@ function ResponsiveDrawer(props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true // Better open performance on mobile.
           }}
 
           sx={{
@@ -136,17 +190,7 @@ function ResponsiveDrawer(props) {
         >
           {drawer}
         </Drawer>
-        
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
+
       </Box>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:'3rem'}}>
@@ -163,10 +207,6 @@ function ResponsiveDrawer(props) {
 }
 
 ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 

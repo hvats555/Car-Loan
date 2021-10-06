@@ -1,21 +1,40 @@
 import React, { useState } from 'react';
 import SearchResultsTable from './SearchResultsTabls/SearchResultsTable';
 import Modal from '../UI/Modal/Modal';
+import Csv from './Export/Csv';
 
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { CSVLink, CSVDownload } from "react-csv";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import Container from '@mui/material/Container';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import PrintIcon from '@mui/icons-material/Print';
+import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import { Typography, IconButton } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { stubFalse } from 'lodash';
+const _ = require('lodash');
+
 
 
 // Problem Statement -> Prepare car search results for that bank front end after adding the approved bank 
 
 function CarSearch(props) {
     const [searchOptionsModal, setSearchOptionsModal] = useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [emailModal, setEmailModal] = useState(true);
+
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div>
@@ -68,11 +87,62 @@ function CarSearch(props) {
 
             <div className="appHeader">
                 <h2>Search</h2>
-                <Button variant="contained" size="small" onClick={() => {setSearchOptionsModal(true)}}><FilterAltIcon /></Button>
+                <div style={{display: 'flex'}}>
+                    <Button variant="contained" size="small" onClick={() => {setSearchOptionsModal(true)}}><FilterAltIcon /></Button>
+
+                    {props.searchResults && !_.isEmpty(props.searchResults) ? 
+                    <div>
+                        <Button
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={handleClick}
+                        >
+                            Export
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={() => {window.print(); handleClose()}}>Print</MenuItem>
+
+                            <MenuItem>
+                                <Csv searchResults={props.searchResults} />
+                            </MenuItem>
+
+                            <MenuItem onClick={() => {setEmailModal(true); handleClose();}}>Email</MenuItem>
+                        </Menu>
+                    </div> : null }
+                </div>
             </div>
 
 
             <SearchResultsTable moreCarSearchLoading={props.moreCarSearchLoading} searchMoreResultsHandler={props.searchMoreResultsHandler} carSearchLoading={props.carSearchLoading} approvedBanks={props.approvedBanks} searchResults={props.searchResults} />
+
+            {emailModal ?
+                <Modal style={{ height: "min(50%, 500px)" }} modalCloseHandler={() => {setEmailModal(false)}}>
+                    <h2 stype={{textAlign: 'center'}}>Enter reciepient's email</h2>
+                    <form onSubmit={(event) => {props.sendEmail(event)}}>
+
+                        <Grid container rowSpacing={2}>
+                            <Grid item xs={12}>
+                                <TextField label="Email" fullWidth id="outlined-basic" size="small" type="email" name="profitAmount" placeholder="Email" value={props.email} onChange={(event) => {props.setEmail(event.target.value)}} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button type="submit" disabled={!props.email} fullWidth variant="contained" size="medium" fullWidth>Send Email</Button>
+                            </Grid>
+                        </Grid>
+
+                    </form>
+                </Modal> : null}
+
+
         </div>
     )
 }

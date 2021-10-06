@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import toast from 'react-hot-toast';
 
 function EditAppointment(props) {
     const appointmentInitialState = {
@@ -99,7 +100,7 @@ function EditAppointment(props) {
                 email: docSnap.data().email,
                 taxExemption: docSnap.data().taxExemption.toString(),
                 createdAt: new Date(docSnap.data().createdAt.seconds * 1000).toString(),
-                appointmentDate: new Date(docSnap.data().appointmentDate.seconds * 1000).toString(),
+                appointmentDate: new Date(docSnap.data().appointmentDate.seconds * 1000).toString()
             })
     
             } else {
@@ -123,6 +124,7 @@ function EditAppointment(props) {
             setAppointment(appointmentInitialState);
             setValidationErrors(validationInitialState);
             props.modalCloseHandler();
+            toast.success("Application updated");
         }
     }
 

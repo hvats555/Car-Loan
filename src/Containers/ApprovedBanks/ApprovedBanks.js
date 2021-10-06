@@ -3,6 +3,7 @@ import { useState } from 'react';
 import AddApprovedBanks from '../../Components/ApprovedBanks/AddApprovedBanks';
 import ListApprovedBanks from '../../Components/ApprovedBanks/ListApprovedBanks/ListApprovedBanks';
 import CarSearch from '../../Components/CarSearch/CarSearch';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 
 import Button from '@mui/material/Button';
@@ -39,6 +40,10 @@ function ApprovedBanks(props) {
     }
 
     const searchResultsHandler = () => {
+        toast('Car search started', {
+            icon: '🔎'
+        });
+        setSearchResults({});
         const url = process.env.REACT_APP_API_URL + `/cars/search?limit=${limit}`;
         setCarSearchLoading(true);
 
@@ -59,9 +64,6 @@ function ApprovedBanks(props) {
         axios.post(url, {
             customerId: props.customerId,
         }).then((result) => {
-            console.log("New result: ", result);
-            console.log("Old search results: ", searchResults);
-
             const concatedResult = searchResults.result.concat(result.data.result);
 
             setSearchResults({
@@ -79,6 +81,30 @@ function ApprovedBanks(props) {
         setNewApprovedBankModal(state);
     }
 
+    const [email, setEmail] = useState(null);
+    const [emailModal, setEmailModal] = useState(true);
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+
+        const url = process.env.REACT_APP_API_URL + '/email';
+        const body = {
+            to: email,
+            approvedBanks: props.appointment.approvedBanks,
+            results: searchResults.result
+        }
+        
+        axios.post(url, body)
+          .then(function (response) {
+              toast.success(`Email successfully send to ${email}`);
+              setEmail(null);
+          })
+          .catch(function (error) {
+            toast.error(`Oops! Something went wrong, cannot send Email`);
+            console.log(error);
+          });
+    }
+
     return (
         <div>
             <div className="appHeader">
@@ -93,7 +119,7 @@ function ApprovedBanks(props) {
             }
             <ListApprovedBanks searchResultsHandler={searchResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
 
-            <CarSearch carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
+            <CarSearch sendEmail={sendEmail} email={email} setEmail={setEmail} carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
         </div>
     )
 }
