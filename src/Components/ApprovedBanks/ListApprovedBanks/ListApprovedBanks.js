@@ -11,6 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { flexbox } from '@mui/system';
+const _ = require('lodash');
 
 function ListApprovedBanks(props) {
     const [approvedBankIndex, setApprovedBankIndex] = useState(null);
@@ -22,8 +24,7 @@ function ListApprovedBanks(props) {
 
     return (
         <div className="tableContainer">
-            { 
-                props.approvedBanks ?
+            { props.approvedBanks && !_.isEmpty(props.approvedBanks) ?
                     <Table size="medium">
                     <TableHead>
                         <TableRow >
@@ -52,7 +53,7 @@ function ListApprovedBanks(props) {
                         </TableRow>
                     ))}
                     </TableBody>
-                </Table> : <p>Approved Banks will be displayer here</p>}
+                </Table> : <div style={{margin: '2rem 0', textAlign: 'center'}}>Approved Banks will be displayed here</div>}
 
             {
                 approvedBankEditModal ?

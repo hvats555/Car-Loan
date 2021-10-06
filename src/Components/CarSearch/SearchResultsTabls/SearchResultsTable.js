@@ -72,7 +72,7 @@ function SearchResultsTable(props) {
                  }
                 
                 {!props.carSearchLoading ? <TableBody>
-                    {props.searchResults && !_.isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
+                    { props.searchResults && !_.isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
                         <TableRow key={index}>
                             <TableCell style={{textAlign: 'center'}}>
                                 <CardMedia
