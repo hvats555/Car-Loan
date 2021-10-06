@@ -1,0 +1,15 @@
+.navContent-right {
+  display: flex;
+  align-items: center;
+}
+
+.navContent-right a {
+  color: white;
+  padding: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .navLinks {
+    display: none;
+  }
+}

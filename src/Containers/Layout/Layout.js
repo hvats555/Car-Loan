@@ -34,6 +34,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { useAuth } from '../../contexts/AuthContext';
 
+import './Layout.css';
+
 
 
 const drawerWidth = 240;
@@ -130,43 +132,55 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
 
-            <Typography variant="h6" noWrap component="div">
+            <Typography sx={{ flexGrow: 1 }} variant="h6" noWrap component="div">
               CarJutsu
             </Typography>
             
-            {currentUser ? <div style={{display: 'flex', alignItems: 'center'}}>
-              
-              <Typography noWrap component="div" sx={{ flexGrow: 1 }}>
-                {currentUser.email}
-              </Typography>
-              <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={() => {handleClose(); logout()}}>Signout</MenuItem>
-                </Menu>
-              </div>: null}
+            <div className="navContent-right">
+              <div className="navLinks">
+                <Link to="/appointments">
+                      Applications
+                </Link>
+                <Link to="/banks" >
+                      Banks
+                </Link>
+                <Link to="/inventory">
+                      Inventory
+                </Link>
+              </div>
+
+              {currentUser ? <div style={{display: 'flex', alignItems: 'center'}}>
+                <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem><em>{currentUser.email}</em></MenuItem>
+                      <MenuItem onClick={() => {handleClose(); logout()}}>Signout</MenuItem>
+                  </Menu>
+                </div>: null}
+            </div>
+
         </Toolbar>
       </AppBar>
       <Box

@@ -87,9 +87,10 @@ function SearchResultsTable(props) {
                             <TableCell style={{textAlign: 'center'}}>{results.car.mileage}</TableCell>
                             <TableCell style={{textAlign: 'center'}}>{results.car.age}</TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>{results.car.numberOfAccidents}</TableCell>
-                            <TableCell style={{textAlign: 'center'}}>{results.car.notes}</TableCell>
-                            <TableCell style={{textAlign: 'center'}}>{results.car.totalDamage}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.insuranceClaim}</TableCell>
+
+                            <TableCell style={{textAlign: 'center'}}>{results.car.insuranceClaimOther}</TableCell>
+                            <TableCell style={{textAlign: 'center'}}>{results.car.otherDamage}</TableCell>
                         {
                             func(props.approvedBanks, results.bank).map((b) => {
                                 if(b.foundCount) {
