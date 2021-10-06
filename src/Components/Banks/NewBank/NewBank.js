@@ -11,7 +11,8 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone';
+import toast from 'react-hot-toast';
 
 import './NewBank.css';
 
@@ -76,6 +77,10 @@ function NewBank(props) {
             setBank(bankInitialState);
             setValidationErrors(validationInitialState);
             props.modalCloseHandler();
+
+            toast('Bank Successfully Added', {
+                icon: '🏦'
+            });
         }
     }
 

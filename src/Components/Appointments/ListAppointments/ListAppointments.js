@@ -136,7 +136,7 @@ function ListAppointments() {
                     <TableBody>
                     {appointments.map((appointment, index) => (
                         <TableRow className="listAppointment__table-row" key={index} >
-                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>{appointment.fullName}
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>{appointment.fullName}
                                 </TableCell>
                                 {/* <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell> */}
                                 <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>

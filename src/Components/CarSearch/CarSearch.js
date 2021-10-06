@@ -13,6 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Container from '@mui/material/Container';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PrintIcon from '@mui/icons-material/Print';
+import CircularProgress from '@mui/material/CircularProgress';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import { Typography, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -26,7 +27,7 @@ const _ = require('lodash');
 function CarSearch(props) {
     const [searchOptionsModal, setSearchOptionsModal] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [emailModal, setEmailModal] = useState(true);
+    const [emailModal, setEmailModal] = useState(false);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -135,7 +136,9 @@ function CarSearch(props) {
                                 <TextField label="Email" fullWidth id="outlined-basic" size="small" type="email" name="profitAmount" placeholder="Email" value={props.email} onChange={(event) => {props.setEmail(event.target.value)}} />
                             </Grid>
                             <Grid item xs={12}>
-                                <Button type="submit" disabled={!props.email} fullWidth variant="contained" size="medium" fullWidth>Send Email</Button>
+                                {!props.emailSendLoading ? <Button type="submit" disabled={!props.email} fullWidth variant="contained" size="medium" fullWidth>Send Email </Button> : <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <CircularProgress />
+                                </div> }
                             </Grid>
                         </Grid>
 

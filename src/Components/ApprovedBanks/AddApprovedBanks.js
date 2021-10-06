@@ -12,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import toast from 'react-hot-toast';
 
 import db from '../../firebase';
 
@@ -118,8 +119,11 @@ function AddApprovedBanks(props) {
             setApprovedBank(initialApprovedBankState);
             setValidationErrors(validationInitialState);
             props.modalCloseHandler();
-        
             props.searchResultsHandler();
+
+            toast('Bank Successfully Added', {
+                icon: '🏦'
+            });
         }
     }
 

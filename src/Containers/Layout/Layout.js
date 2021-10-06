@@ -133,12 +133,12 @@ function ResponsiveDrawer(props) {
           </IconButton>
 
             <Typography sx={{ flexGrow: 1 }} variant="h6" noWrap component="div">
-              CarJutsu
+              <Link style={{color: "white"}} to='/'>CarJutsu</Link>
             </Typography>
             
             <div className="navContent-right">
               <div className="navLinks">
-                <Link to="/appointments">
+                <Link to="/applications">
                       Applications
                 </Link>
                 <Link to="/banks" >
@@ -209,8 +209,8 @@ function ResponsiveDrawer(props) {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:'3rem'}}>
         <div style={{overflowX: 'hidden'}}>
-          <PrivateRoute exact path="/appointments/:id" component={AppointmentSingle} />
-          <PrivateRoute exact path="/appointments" component={Appointment}/>
+          <PrivateRoute exact path="/applications/:id" component={AppointmentSingle} />
+          <PrivateRoute exact path="/applications" component={Appointment}/>
           <PrivateRoute exact path="/banks" component={Bank} />
           <PrivateRoute exact path="/inventory" component={Inventory} />
           <PrivateRoute exact path="/" component={Appointment}/>

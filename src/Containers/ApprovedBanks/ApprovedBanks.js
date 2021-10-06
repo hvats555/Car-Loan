@@ -20,6 +20,7 @@ function ApprovedBanks(props) {
     const [carSearchLoading, setCarSearchLoading] = useState(false);
     const [moreCarSearchLoading, setMoreCarSearchLoading] = useState(false);
     const [isCarEmpty, setIsCarsEmpty] = useState(false);
+    const [emailSendLoading, setEmailSendLoading] = useState(false);
 
     const [carSearchOptions, setCarSearchOptions] = useState({
         customerId: props.customerId,
@@ -86,7 +87,7 @@ function ApprovedBanks(props) {
 
     const sendEmail = (e) => {
         e.preventDefault();
-
+        setEmailSendLoading(true);
         const url = process.env.REACT_APP_API_URL + '/email';
         const body = {
             to: email,
@@ -97,9 +98,11 @@ function ApprovedBanks(props) {
         axios.post(url, body)
           .then(function (response) {
               toast.success(`Email successfully send to ${email}`);
+              emailSendLoading(false);
               setEmail(null);
           })
           .catch(function (error) {
+            setEmailSendLoading(false);
             toast.error(`Oops! Something went wrong, cannot send Email`);
             console.log(error);
           });
@@ -119,7 +122,7 @@ function ApprovedBanks(props) {
             }
             <ListApprovedBanks searchResultsHandler={searchResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
 
-            <CarSearch sendEmail={sendEmail} email={email} setEmail={setEmail} carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
+            <CarSearch emailSendLoading={emailSendLoading} sendEmail={sendEmail} email={email} setEmail={setEmail} carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
         </div>
     )
 }

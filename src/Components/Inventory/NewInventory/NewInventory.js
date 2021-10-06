@@ -7,6 +7,7 @@ import uploadInventory from '../../../utils/uploadInventory';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import toast from 'react-hot-toast';
 
 import Dropzone from 'react-dropzone'
 
@@ -34,6 +35,9 @@ function Newinventory(props) {
             setinventory(inventoryInitialState);
             setValidationErrors(validationInitialState);
             props.modalCloseHandler();
+            toast('Inventory Successfully uploaded', {
+                icon: '🛒'
+            });
         }
     }
 
