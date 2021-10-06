@@ -74,7 +74,7 @@ function ResponsiveDrawer(props) {
                 </ListItem> 
             </Link>
 
-            <Link to="/appointments">
+            <Link to="/applications">
                 <ListItem button>
                         <ListItemIcon>
                             <AccessTimeIcon />

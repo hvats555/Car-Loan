@@ -139,10 +139,10 @@ function ListAppointments() {
                                 <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>{appointment.fullName}
                                 </TableCell>
                                 {/* <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell> */}
-                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>
                                     {appointment.email ? appointment.email : 'N/A'}
                                 </TableCell>
-                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/appointments/${appointment.id}`}>
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>
                                     {appointment.phoneNumber ? appointment.phoneNumber : 'N/A'}
                                 </TableCell>
                         </TableRow>

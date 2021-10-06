@@ -68,12 +68,12 @@ function CarSearch(props) {
                         <TextField label="Interest Break" fullWidth id="outlined-basic" size="small" type="number" name="interestBreak" placeholder="Interest break" value={props.carSearchOptions.interestBreak} onChange={(event) => {props.carSearchOptionsHandler("interestBreak", event.target.value)}} />
                     </Grid>
                     
-                    <Grid item xs={2}>
-                        <Button disabled={props.approvedBanks && !(props.approvedBanks.length > 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler(); setSearchOptionsModal(false)}}>Search</Button>
+                    <Grid item md={2} xs={6}>
+                        <Button disabled={props.approvedBanks && !(props.approvedBanks.length != 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler(); setSearchOptionsModal(false)}}>Search</Button>
                     </Grid>
 
-                    {props.searchResults && props.searchResults.length != 0 ? 
-                    <Grid item xs={1}>
+                    {props.searchResults && !_.isEmpty(props.searchResults) ? 
+                    <Grid item xs={6}>
                             <Button
                             color="secondary"
                                 variant="contained"
@@ -95,7 +95,7 @@ function CarSearch(props) {
                                 'aria-labelledby': 'basic-button',
                                 }}
                             >
-                                <MenuItem onClick={() => {window.print(); handleClose()}}>Print</MenuItem>
+                                <MenuItem onClick={() => {handleClose(); window.print();}}>Print</MenuItem>
 
                                 <MenuItem>
                                     <Csv searchResults={props.searchResults} />
