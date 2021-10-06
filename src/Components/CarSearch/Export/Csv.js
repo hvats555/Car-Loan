@@ -10,9 +10,13 @@ function Csv(props) {
         carMileage: item.car.mileage,
         carVin: item.car.vin,
         carPrice: item.car.price,
-        numberOfAccidents: item.car.numberOfAccidents,
-        notes: item.car.notes,
-        totalDamage: item.car.totalDamage,
+        carMileage: item.car.mileage,
+        carAge: item.car.age,
+        
+        insuranceClaim: item.car.insuranceClaim,
+        insuranceClaimOther: item.car.insuranceClaimOther,
+        otherDamage: item.car.otherDamage,
+
         carCalculatedEmi: item.bank.map(bank => bank.calculatedEmi),
         bankNames: item.bank.map(bank => bank.bankName),
         bankMonthlyEmi: item.bank.map(bank => bank.monthlyEmi),

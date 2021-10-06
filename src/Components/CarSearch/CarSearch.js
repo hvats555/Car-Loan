@@ -10,14 +10,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import Container from '@mui/material/Container';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import PrintIcon from '@mui/icons-material/Print';
 import CircularProgress from '@mui/material/CircularProgress';
-import AttachEmailIcon from '@mui/icons-material/AttachEmail';
-import { Typography, IconButton } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { stubFalse } from 'lodash';
 const _ = require('lodash');
 
 
@@ -76,10 +69,10 @@ function CarSearch(props) {
                     </Grid>
                     
                     <Grid item xs={2}>
-                        <Button disabled={!(props.approvedBanks.length > 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler(); setSearchOptionsModal(false)}}>Search</Button>
+                        <Button disabled={props.approvedBanks && !(props.approvedBanks.length > 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler(); setSearchOptionsModal(false)}}>Search</Button>
                     </Grid>
 
-                    {props.searchResults && props.searchResults.length > 0 ? 
+                    {props.searchResults && props.searchResults.length != 0 ? 
                     <Grid item xs={1}>
                             <Button
                             color="secondary"
