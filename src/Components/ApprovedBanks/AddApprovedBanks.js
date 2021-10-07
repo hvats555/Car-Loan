@@ -46,6 +46,11 @@ function AddApprovedBanks(props) {
         term: {
             isError: false,
             errorText: ''
+        },
+
+        monthlyEmi: {
+            isError: false,
+            errorText: ''
         }
     }
 
@@ -84,6 +89,12 @@ function AddApprovedBanks(props) {
           errors.term['isError'] = !formIsValid;
           errors.term['errorText'] = 'Cannot be empty';
       }
+
+      if(!fields['monthlyEmi']){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Cannot be empty';
+    }
   
       setValidationErrors(errors);
       return formIsValid;
@@ -108,7 +119,7 @@ function AddApprovedBanks(props) {
         event.preventDefault();
         
         if(handleValidation()) {
-            approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
+            // approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
 
             const approvedBankRef = doc(db, "customers", props.customerId);
     
@@ -196,12 +207,17 @@ function AddApprovedBanks(props) {
                         label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
                     </Grid>
 
-                    {/* <Grid fullWidth item xs={12}>
-                        <TextField label="Profit Margin" fullWidth id="outlined-basic" size="small" type="number" name="term" value={profitMargin} onChange={(event) => {setProfitMargin(event.target.value)}} />
+                    <Grid fullWidth item xs={12}>
+                        <TextField
+                        
+                        errorState={validationErrors.monthlyEmi.isError}
+                        helperText={validationErrors.monthlyEmi.errorText}
+                        
+                        label="Monthly EMI" fullWidth id="outlined-basic" size="small" type="number" name="monthlyEmi" value={approvedBank.monthlyEmi} onChange={(event) => {inputChangeHandler("monthlyEmi", event.target.value)}} />
                     </Grid>
 
 
-                    <Grid fullWidth item xs={12}>
+                    {/* <Grid fullWidth item xs={12}>
                         <TextField label="Down Payment" label="Down payment" fullWidth id="outlined-basic" size="small" type="number" name="downPayment" value={approvedBank.downPayment} onChange={(event) => {inputChangeHandler("downPayment", event.target.value)}} />
                     </Grid>
 

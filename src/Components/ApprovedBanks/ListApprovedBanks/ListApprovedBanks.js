@@ -41,9 +41,9 @@ function ListApprovedBanks(props) {
                     {props.approvedBanks.map((approvedBank, index) => (
                         <TableRow key={approvedBank.bankId}>
                                 <TableCell sx={{textAlign: 'center'}}>{approvedBank.bankName}</TableCell>
-                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.term}</TableCell>
-                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.amount}</TableCell>
-                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.interestRate}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.term} months</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>${approvedBank.amount}</TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>{approvedBank.interestRate}%</TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>${approvedBank.monthlyEmi}</TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
                                     <IconButton onClick={() => {setApprovedBankIndex(index); approvedBankEditModalHandler(true)}}>

@@ -6,6 +6,8 @@ import CarSearch from '../../Components/CarSearch/CarSearch';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+import { useAuth } from '../../contexts/AuthContext';
+ 
 import Button from '@mui/material/Button';
 
 import Modal from '../../Components/UI/Modal/Modal';
@@ -14,6 +16,9 @@ import Modal from '../../Components/UI/Modal/Modal';
 function ApprovedBanks(props) {
     const limit = 25;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
+
+    const {currentUser} = useAuth();
+
     
     const [searchResults, setSearchResults] = useState({});
 
@@ -83,29 +88,37 @@ function ApprovedBanks(props) {
     }
 
     const [email, setEmail] = useState(null);
-    const [emailModal, setEmailModal] = useState(true);
 
     const sendEmail = (e) => {
+        console.log(currentUser.email);
         e.preventDefault();
+
         setEmailSendLoading(true);
         const url = process.env.REACT_APP_API_URL + '/email';
         const body = {
-            to: email,
+            to: currentUser.email,
             approvedBanks: props.appointment.approvedBanks,
             results: searchResults.result
         }
-        
-        axios.post(url, body)
-          .then(function (response) {
-              toast.success(`Email successfully send to ${email}`);
-              emailSendLoading(false);
-              setEmail(null);
-          })
-          .catch(function (error) {
-            setEmailSendLoading(false);
-            toast.error(`Oops! Something went wrong, cannot send Email`);
-            console.log(error);
-          });
+
+        toast.promise(
+            axios.post(url, body)
+            .then(function (response) {
+                console.log(response);
+                setEmailSendLoading(false);
+                setEmail(null);
+            })
+            .catch(function (error) {
+              setEmailSendLoading(false);
+              toast.error(`Oops! Something went wrong, cannot send Email`);
+              console.log(error);
+            }),
+             {
+               loading: 'Sending email, Please wait ⏳',
+               success: <b>Email Sent!</b>,
+               error: <b>Oops, Something went wrong. Email not sent</b>,
+             }
+        );
     }
 
     return (

@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SearchResultsTable from './SearchResultsTabls/SearchResultsTable';
-import Modal from '../UI/Modal/Modal';
 import Csv from './Export/Csv';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { CSVLink, CSVDownload } from "react-csv";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import CircularProgress from '@mui/material/CircularProgress';
 const _ = require('lodash');
 
 
@@ -18,9 +15,7 @@ const _ = require('lodash');
 // Problem Statement -> Prepare car search results for that bank front end after adding the approved bank 
 
 function CarSearch(props) {
-    const [searchOptionsModal, setSearchOptionsModal] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [emailModal, setEmailModal] = useState(false);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -69,7 +64,7 @@ function CarSearch(props) {
                     </Grid>
                     
                     <Grid item md={2} xs={6}>
-                        <Button disabled={props.approvedBanks && !(props.approvedBanks.length != 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler(); setSearchOptionsModal(false)}}>Search</Button>
+                        <Button disabled={props.approvedBanks && !(props.approvedBanks.length != 0) } endIcon={<SearchIcon />} variant="contained" size="medium" onClick={() => {props.searchResultsHandler();}}>Search</Button>
                     </Grid>
 
                     {props.searchResults && !_.isEmpty(props.searchResults) ? 
@@ -101,31 +96,13 @@ function CarSearch(props) {
                                     <Csv searchResults={props.searchResults} />
                                 </MenuItem>
 
-                                <MenuItem onClick={() => {setEmailModal(true); handleClose();}}>Email</MenuItem>
+                                <MenuItem onClick={(event) => {props.sendEmail(event); handleClose();}}>Email</MenuItem>
                             </Menu>
                     </Grid> : null }
                 </Grid>
             </form>
 
             <SearchResultsTable moreCarSearchLoading={props.moreCarSearchLoading} searchMoreResultsHandler={props.searchMoreResultsHandler} carSearchLoading={props.carSearchLoading} approvedBanks={props.approvedBanks} searchResults={props.searchResults} />
-
-            {emailModal ?
-                <Modal style={{ height: "min(50%, 500px)" }} modalCloseHandler={() => {setEmailModal(false)}}>
-                    <h2 stype={{textAlign: 'center'}}>Enter reciepient's email</h2>
-                    <form onSubmit={(event) => {props.sendEmail(event)}}>
-
-                        <Grid container rowSpacing={2}>
-                            <Grid item xs={12}>
-                                <TextField label="Email" fullWidth id="outlined-basic" size="small" type="email" name="profitAmount" placeholder="Email" value={props.email} onChange={(event) => {props.setEmail(event.target.value)}} />
-                            </Grid>
-                            <Grid item xs={12}>
-                                {!props.emailSendLoading ? <Button type="submit" disabled={!props.email} fullWidth variant="contained" size="medium" fullWidth>Send Email </Button> : <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <CircularProgress />
-                                </div> }
-                            </Grid>
-                        </Grid>
-                    </form>
-                </Modal> : null}
         </div>
     )
 }

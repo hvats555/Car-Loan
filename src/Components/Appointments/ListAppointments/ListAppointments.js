@@ -116,7 +116,7 @@ function ListAppointments() {
     return (
         <div className="listAppointment">
             <div className="appHeader">
-                <h2>Appointments</h2>
+                <h2>Credit Applications</h2>
                 <FilterAppointments appointmentFilterHandler={appointmentFilterHandler}/>
             </div>
 

@@ -42,6 +42,11 @@ function EditApprovedBanks(props) {
         term: {
             isError: false,
             errorText: ''
+        },
+
+        monthlyEmi: {
+            isError: false,
+            errorText: ''
         }
     }
 
@@ -70,6 +75,12 @@ function EditApprovedBanks(props) {
           errors.term['isError'] = !formIsValid;
           errors.term['errorText'] = 'Cannot be empty';
       }
+
+      if(!fields['monthlyEmi']){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Cannot be empty';
+    }
   
       setValidationErrors(errors);
       return formIsValid;
@@ -94,7 +105,7 @@ function EditApprovedBanks(props) {
         event.preventDefault();
         
         if(handleValidation()) {
-            approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
+            // approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
 
             const approvedBankRef = doc(db, "customers", props.customerId);
     
@@ -161,6 +172,15 @@ function EditApprovedBanks(props) {
                         helperText={validationErrors.term.errorText}
                         
                         label="Term" fullWidth id="outlined-basic" size="small" type="number" name="term" value={approvedBank.term} onChange={(event) => {inputChangeHandler("term", event.target.value)}} />
+                    </Grid>
+
+                    <Grid fullWidth item xs={12}>
+                        <TextField
+                        
+                        errorState={validationErrors.monthlyEmi.isError}
+                        helperText={validationErrors.monthlyEmi.errorText}
+                        
+                        label="Monthly EMI" fullWidth id="outlined-basic" size="small" type="number" name="monthlyEmi" value={approvedBank.monthlyEmi} onChange={(event) => {inputChangeHandler("monthlyEmi", event.target.value)}} />
                     </Grid>
                 </Grid>
 
