@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { doc, updateDoc, arrayUnion, getDocs, collection } from "firebase/firestore"; 
+import { doc, updateDoc, arrayUnion, getDocs, collection, getDoc } from "firebase/firestore"; 
 import calculateEmi from '../../utils/calculateEmi';
 import prepareCarSearchResults from '../../utils/prepareCarSearchResults';
 
@@ -14,10 +14,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import toast from 'react-hot-toast';
 
+import {includes} from 'lodash';
+
 import db from '../../firebase';
 
 function AddApprovedBanks(props) {
     const initialApprovedBankState = {
+        bankPrograms: null,
         bankId: null,
         bankName: null,
         amount: null,
@@ -51,13 +54,20 @@ function AddApprovedBanks(props) {
         monthlyEmi: {
             isError: false,
             errorText: ''
+        },
+
+        bankProgram: {
+            isError: false,
+            errorText: ''
         }
     }
 
     const [validationErrors, setValidationErrors] = useState(validationInitialState);
 
     const [approvedBank, setApprovedBank] = useState(initialApprovedBankState);
+    const [alreadyApprovedBanks, setAlreadyApprovedBanks] = useState([]);
     const [banks, setBanks] = useState([]);
+    const [bankPrograms, setBankPrograms] = useState(null);
     const [profitMargin, setProfitMargin] = useState(0);
 
     const handleValidation = () => {
@@ -70,6 +80,12 @@ function AddApprovedBanks(props) {
         formIsValid = false;
         errors.bankName['isError'] = !formIsValid;
         errors.bankName['errorText'] = 'Cannot be empty';
+      }
+
+      if(!fields['bankProgram']){
+        formIsValid = false;
+        errors.bankProgram['isError'] = !formIsValid;
+        errors.bankProgram['errorText'] = 'Cannot be empty';
       }
 
       if(!fields['amount']){
@@ -101,19 +117,34 @@ function AddApprovedBanks(props) {
     }
 
     useEffect(() => {
+        const fetchApprovedBanks = async () => {
+            const customerRef = doc(db, "customers", props.customerId);
+            const customerSnap = await getDoc(customerRef);
+            const alreadyApprovedBanksArray = []
+            customerSnap.data().approvedBanks.forEach((approvedBank) => {
+                alreadyApprovedBanksArray.push(approvedBank.bankId);
+            });
+
+            setAlreadyApprovedBanks(alreadyApprovedBanksArray);
+        }
+        fetchApprovedBanks();
+
+
         const fetchBanks = async () => {
             const querySnapshot = await getDocs(collection(db, "banks"));
+
             const banksArray = []
             querySnapshot.forEach((doc) => {
                 banksArray.push({
                     id: doc.id,
-                    name: doc.data().name
+                    name: doc.data().name,
+                    bankPrograms: doc.data().bankInterest
                 });
             });
             setBanks(banksArray);
         }
         fetchBanks();
-    });
+    }, []);
 
     const saveApprovedBankInDb = async (event) => {
         event.preventDefault();
@@ -143,11 +174,20 @@ function AddApprovedBanks(props) {
     }
 
     const bankInputHandler = (index) => {
+        console.log("index", index);
         setApprovedBank({
             ...approvedBank,
             bankId: banks[index].id,
             bankName: banks[index].name
         });
+
+        setBankPrograms(banks[index].bankPrograms);
+    }
+
+    const programInputHandler = (index) => {
+        setApprovedBank({
+            ...approvedBank, bankProgram: bankPrograms[index]
+        })
     }
 
     return ( 
@@ -158,9 +198,9 @@ function AddApprovedBanks(props) {
                     <Grid item xs={12}>
                         <InputLabel id="bankName-label">Bank</InputLabel>
                         <Select
+                            defaultValue=""
                             errorState={validationErrors.bankName.isError}
                             helperText={validationErrors.bankName.errorText}
-
                             placeholder="Banks"
                             fullWidth
                             size="small"
@@ -173,12 +213,41 @@ function AddApprovedBanks(props) {
 
                         {
                             banks ? banks.map((bank, index) => (
-                                <MenuItem key={bank.id} value={index}>{bank.name}</MenuItem>
-                            )) : <MenuItem key='N/A' disabled value="N/A">No banks found</MenuItem>
+                                <MenuItem disabled={includes(alreadyApprovedBanks, bank.id)} key={bank.id}value={index}>{bank.name}</MenuItem> 
+                            )) : null
                         }
+
                         </Select>
 
                     </Grid>
+
+                    {approvedBank.bankId ? <Grid item xs={12}>
+                        <InputLabel id="bankName-label">Bank Program</InputLabel>
+                        <Select
+                            errorState={validationErrors.bankProgram.isError}
+                            helperText={validationErrors.bankProgram.errorText}
+                            defaultValue=""
+
+                            placeholder="Banks"
+                            fullWidth
+                            size="small"
+                            labelId="bankProgram-label"
+                            id="bankProgram"
+                            label="Bank Program"
+                            name="bankProgram"
+                            onChange={(event) => {programInputHandler(event.target.value)}}
+                        >
+
+                        {
+                            bankPrograms.map((program, index) => (
+                                <MenuItem key={index} value={index}>{program.Program} - {program.RatesFrom}</MenuItem>
+                            ))
+                        }
+
+                        </Select>
+
+                    </Grid> : null}
+
 
                     <Grid item xs={12}>
                         <TextField

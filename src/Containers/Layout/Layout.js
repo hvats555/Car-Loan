@@ -133,7 +133,7 @@ function ResponsiveDrawer(props) {
           </IconButton>
 
             <Typography sx={{ flexGrow: 1 }} variant="h6" noWrap component="div">
-              <Link style={{color: "white"}} to='/'>CarJutsu</Link>
+              <Link style={{color: "white"}} to='/'>CarJitsu</Link>
             </Typography>
             
             <div className="navContent-right">

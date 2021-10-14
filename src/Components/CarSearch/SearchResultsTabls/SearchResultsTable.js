@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
@@ -22,7 +22,6 @@ function SearchResultsTable(props) {
     const func = (approvedBank, bank) => {
         for(let i=0; i<approvedBank.length; i++) {
             for(let j=0; j<bank.length; j++) {
-                // less than login
                 if(approvedBank[i].bankId == bank[j].bankId) {
                     approvedBank[i].foundCount = 1;
                     approvedBank[i].calculatedEmi = bank[j].calculatedEmi;
@@ -33,10 +32,11 @@ function SearchResultsTable(props) {
                 }
             }        
         }
+        console.log(approvedBank);
         return approvedBank;
     }
 
-
+    console.log(props.searchResults);
     return (
         <div className="tableContainer">
              <Table size="small">
@@ -99,6 +99,11 @@ function SearchResultsTable(props) {
                             <TableCell style={{textAlign: 'center'}}>{results.car.totalDamage}</TableCell>
 
                             {/* <TableCell style={{textAlign: 'center'}}>{results.car.notes}</TableCell> */}
+
+                            {/* {results.bank.map((b) => (
+                                <TableCell sx={{textAlign: "center"}}>{b.calculatedEmi}</TableCell>  
+                            ))} */}
+                            
                         {
                             func(props.approvedBanks, results.bank).map((b) => {
                                 if(b.foundCount) {
@@ -107,7 +112,7 @@ function SearchResultsTable(props) {
                                     )
                                 } else {
                                     return (
-                                        <TableCell sx={{color: "red", textAlign: "center"}}><CancelIcon /> {b.calculatedEmi}</TableCell>
+                                        <TableCell sx={{color: "red", textAlign: "center"}}><CancelIcon /> {b.calculatedEmi} </TableCell>
                                     )
                                 }
                             })

@@ -6,6 +6,7 @@ import db from '../../../firebase';
 import {collection, addDoc, serverTimestamp} from "firebase/firestore"; 
 import _ from 'lodash';
 import upload from '../../../utils/upload';
+import uploadBankInterestFile from '../../../utils/uploadBankInterestFile';
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -19,7 +20,8 @@ import './NewBank.css';
 function NewBank(props) {
     const bankInitialState = {
         name: '',
-        vehicalBookingGuide: null
+        vehicalBookingGuide: null,
+        bankInterestFile: null
     }
 
     const [bank, setBank] = useState(bankInitialState);
@@ -35,6 +37,11 @@ function NewBank(props) {
         },
 
         vehicalBookingGuide: {
+            isError: false,
+            errorText: ''
+        },
+
+        bankInterestFile: {
             isError: false,
             errorText: ''
         }
@@ -59,6 +66,12 @@ function NewBank(props) {
           errors.vehicalBookingGuide['isError'] = !formIsValid;
           errors.vehicalBookingGuide['errorText'] = 'Please upload vehical booking guide';
         }
+
+        if(!fields['bankInterestFile']){
+            formIsValid = false;
+            errors.bankInterestFile['isError'] = !formIsValid;
+            errors.bankInterestFile['errorText'] = 'Please upload bank interest file';
+          }
     
         setValidationErrors(errors);
         return formIsValid;
@@ -69,9 +82,14 @@ function NewBank(props) {
         event.preventDefault();
         if(handleValidation()) {
             bank.createdAt = serverTimestamp();
-            const bankRes = await addDoc(collection(db, "banks"), _.omit(bank, ['vehicalBookingGuide']));
+            const bankRes = await addDoc(collection(db, "banks"), _.omit(bank, ['vehicalBookingGuide', 'bankInterestFile']));
+
             if(bank.vehicalBookingGuide) {
                 upload(bank.vehicalBookingGuide, bankRes.id);
+            }
+
+            if(bank.bankInterestFile) {
+                uploadBankInterestFile(bank.bankInterestFile, bankRes.id);
             }
     
             setBank(bankInitialState);
@@ -89,7 +107,7 @@ function NewBank(props) {
             Add a new bank
 
             <form onSubmit={saveBankInDb}>
-                <Grid container rowSpacing={1}>
+                <Grid container rowSpacing={1} columnSpacing={1}>
                     <Grid item xs={12}>
                         <TextField
                         
@@ -98,14 +116,14 @@ function NewBank(props) {
                         
                         label="Bank name" fullWidth id="outlined-basic" size="small" type="text" name="name" placeholder="Bank name" value={bank.name} onChange={(event) => {inputChangeHandler("name", event.target.value)}} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({...bank, 'vehicalBookingGuide': acceptedFiles[0]})}}>   
                             {({getRootProps, getInputProps, isDragActive}) => (
                                 <section>
                                     <div class="dropZoneBorder" {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         {
-                                            bank.vehicalBookingGuide && !isDragActive ? <p>{bank.vehicalBookingGuide.name}</p> : <p>Drag 'n' drop some files here, or click to select files</p>
+                                            bank.vehicalBookingGuide && !isDragActive ? <p>{bank.vehicalBookingGuide.name}</p> : <p>Drop vehical booking guide here</p>
                                         }
     
                                         {isDragActive ? <p>Drop files here</p>: null}                                   
@@ -116,6 +134,26 @@ function NewBank(props) {
                         </Dropzone>
                         {validationErrors.vehicalBookingGuide.isError ? 
                          <p>{validationErrors.vehicalBookingGuide.errorText}</p>: null}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Dropzone accept=".csv" onDrop={(acceptedFiles) => {setBank({...bank, 'bankInterestFile': acceptedFiles[0]})}}>   
+                            {({getRootProps, getInputProps, isDragActive}) => (
+                                <section>
+                                    <div class="dropZoneBorder" {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        {
+                                            bank.bankInterestFile && !isDragActive ? <p>{bank.bankInterestFile.name}</p> : <p>Drop bank interest file here</p>
+                                        }
+    
+                                        {isDragActive ? <p>Drop files here</p>: null}                                   
+                                    </div>
+                                </section>
+                            )}
+
+                        </Dropzone>
+                        {validationErrors.bankInterestFile.isError ? 
+                         <p>{validationErrors.bankInterestFile.errorText}</p>: null}
                     </Grid>
                     <Button fullWidth sx={{marginTop: '20px'}} type="submit" variant="contained">Add bank</Button>
                 </Grid>
