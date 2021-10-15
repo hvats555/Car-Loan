@@ -6,15 +6,16 @@ import CarSearch from '../../Components/CarSearch/CarSearch';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
 import { useAuth } from '../../contexts/AuthContext';
  
-import Button from '@mui/material/Button';
-
 import Modal from '../../Components/UI/Modal/Modal';
 // import store from 'store';
 
 function ApprovedBanks(props) {
-    const limit = 5;
+    const limit = 500;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();
@@ -30,6 +31,7 @@ function ApprovedBanks(props) {
     const [carSearchOptions, setCarSearchOptions] = useState({
         customerId: props.customerId,
         profitAmount: 3000,
+        adminFee: 700,
         downPayment: 0,
         tradeInValue: 0,
         termExtension: 0,
@@ -125,7 +127,10 @@ function ApprovedBanks(props) {
         <div>
             <div className="appHeader">
                 <h3>Approved Banks</h3>
-                <Button variant="contained" size="small" onClick={() => {newApprovedBankModalHandler(true)}}>Add New</Button>
+
+                <Fab onClick={() => {newApprovedBankModalHandler(true)}}color="primary" aria-label="add">
+                <AddIcon />
+            </Fab>
             </div>
 
             {newApprovedBankModal ? 

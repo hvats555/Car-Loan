@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
@@ -13,16 +13,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import prepareCarSearchResults from '../../../utils/prepareCarSearchResults';
 
-const store = require('store');
 const _ = require('lodash');
 
 function SearchResultsTable(props) {
     const func = (approvedBank, bank) => {
         for(let i=0; i<approvedBank.length; i++) {
             for(let j=0; j<bank.length; j++) {
-                if(approvedBank[i].bankId == bank[j].bankId) {
+                if(approvedBank[i].bankId === bank[j].bankId) {
                     approvedBank[i].foundCount = 1;
                     approvedBank[i].calculatedEmi = bank[j].calculatedEmi;
                     break;
@@ -69,7 +67,7 @@ function SearchResultsTable(props) {
                             )) : null }
     
                         </TableRow>
-                    </TableHead> : <p>Search Results will be displayed here</p>
+                    </TableHead> : <div style={{textAlign: 'center', marginTop: '1rem'}}>Search Results will be displayed here</div>
                  }
                 
                 {!props.carSearchLoading ? <TableBody>

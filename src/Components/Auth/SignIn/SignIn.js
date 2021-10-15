@@ -34,7 +34,6 @@ const theme = createTheme();
 export default function SignIn() {
   const [input, setInput] = useState({email: '', password: ''});
 
-  const emailRef = useRef();
   const passwordRef = useRef();
   const {login} = useAuth();
   const {currentUser} = useAuth();
@@ -45,7 +44,7 @@ export default function SignIn() {
     event.preventDefault();
 
     try{
-        const res = await login(input.email, input.password);
+        await login(input.email, input.password);
         history.push('/');
         console.log(currentUser);
     } catch (e) {

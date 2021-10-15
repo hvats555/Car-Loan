@@ -7,11 +7,10 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import ApprovedBankCartoon from '../../Cartoons/ApprovedBankCartoon';
 
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { flexbox } from '@mui/system';
 const _ = require('lodash');
 
 function ListApprovedBanks(props) {
@@ -53,12 +52,12 @@ function ListApprovedBanks(props) {
                         </TableRow>
                     ))}
                     </TableBody>
-                </Table> : <div style={{margin: '2rem 0', textAlign: 'center'}}>Approved Banks will be displayed here</div>}
+                </Table> : <ApprovedBankCartoon />}
 
             {
                 approvedBankEditModal ?
                 <Modal modalCloseHandler={() => {approvedBankEditModalHandler(false)}}>
-                    <EditApprovedBanks searchResultsHandler={props.searchResultsHandler} fetchCarSearchResults={props.fetchCarSearchResults} setCars={props.setCars} fetchCarSearchResults={props.fetchCarSearchResults} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
+                    <EditApprovedBanks searchResultsHandler={props.searchResultsHandler} fetchCarSearchResults={props.fetchCarSearchResults} setCars={props.setCars} modalCloseHandler={() => {approvedBankEditModalHandler(false)}} customerId={props.customerId} approvedBank={props.approvedBanks[approvedBankIndex]} />
                 </Modal> : null
             }
 

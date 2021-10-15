@@ -65,7 +65,7 @@ function NewAppointment(props) {
         }
   
         if(fields['phoneNumber']){
-            if(fields['phoneNumber'].length != 10)
+            if(fields['phoneNumber'].length !== 10)
             formIsValid = false;
             errors.phoneNumber['isError'] = !formIsValid;
             errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';
@@ -91,6 +91,8 @@ function NewAppointment(props) {
         if(handleValidation()) {
             appointment.createdAt = serverTimestamp();
             appointment.appointmentDate = Timestamp.fromDate(new Date(appointment.appointmentDate));
+
+            appointment.fullName = appointment.fullName.toLowerCase();
     
             await addDoc(collection(db, "customers"), appointment);
     

@@ -17,6 +17,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import capitalizeFirstLetter from '../../../utils/capitalizeFirstLetter';
+
 import './ListAppointments.css';
 
 var _ = require('lodash');
@@ -64,7 +66,8 @@ function ListAppointments() {
 
 
     const searchCustomers = (input) => {
-        const q = query(collection(db, "customers"), orderBy('fullName'), where('fullName', '>=', input), where('fullName', '<=', input + "\uf8ff"));
+        const customerName = input.toLowerCase();
+        const q = query(collection(db, "customers"), orderBy('fullName'), where('fullName', '>=', customerName), where('fullName', '<=', customerName + "\uf8ff"));
 
         onSnapshot(q, (querySnapshot) => {
             const appointments = [];
@@ -136,7 +139,8 @@ function ListAppointments() {
                     <TableBody>
                     {appointments.map((appointment, index) => (
                         <TableRow className="listAppointment__table-row" key={index} >
-                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>{appointment.fullName}
+
+                                <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>{capitalizeFirstLetter(appointment.fullName)}
                                 </TableCell>
                                 {/* <TableCell component={Link} to={`/appointments/${appointment.id}`}>{appointment.appointmentDate}</TableCell> */}
                                 <TableCell sx={{textAlign: 'center'}} component={Link} to={`/applications/${appointment.id}`}>

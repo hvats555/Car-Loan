@@ -16,6 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import capitalizeFirstLetter from '../../utils/capitalizeFirstLetter';
+
 import './AppointmentSingle.css';
 
 
@@ -95,10 +97,10 @@ function AppointmentDetails({ match }) {
 
                 <div className="userInfo">
                     <div className="appointmentSingle__info">
-                        <h1>{appointment.fullName}</h1>
-                        <p>{appointment.email}</p>
-                        <p>{appointment.phoneNumber}</p>
-                        <p>Tax Exemption: {appointment.taxExemption}</p>
+                        <h1>{appointment.fullName? capitalizeFirstLetter(appointment.fullName): null}</h1>
+                        <p>Email: {appointment.email ? appointment.email : "N/A"}</p>
+                        <p>Phone Number: {appointment.phoneNumber ? appointment.phoneNumber : "N/A"}</p>
+                        <p>Tax exempt: {appointment.taxExemption ? "Yes" : "No"}</p>
                     </div>
 
                     <div>              

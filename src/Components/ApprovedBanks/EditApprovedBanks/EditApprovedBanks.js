@@ -1,9 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import { doc, updateDoc, arrayUnion, getDocs, collection, arrayRemove } from "firebase/firestore"; 
-import calculateEmi from '../../../utils/calculateEmi';
 import db from '../../../firebase';
-// import store from 'store';
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -24,9 +22,7 @@ function EditApprovedBanks(props) {
     }
 
     const [approvedBank, setApprovedBank] = useState(props.approvedBank);
-    const [profitMargin, setProfitMargin] = useState(3000);
     const [banks, setBanks] = useState([]);
-
 
     const validationInitialState = {
         amount: {

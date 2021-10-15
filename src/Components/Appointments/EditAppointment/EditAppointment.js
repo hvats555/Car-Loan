@@ -65,7 +65,7 @@ function EditAppointment(props) {
         // }
 
         if(fields['phoneNumber']){
-            if(fields['phoneNumber'].toString().length != 10)
+            if(fields['phoneNumber'].toString().length !== 10)
             formIsValid = false;
             errors.phoneNumber['isError'] = !formIsValid;
             errors.phoneNumber['errorText'] = 'Phone number must be of 10 digits';

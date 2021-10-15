@@ -18,7 +18,6 @@ import PrivateRoute from '../../Components/Auth/PrivateRoute';
 import {Link} from 'react-router-dom';
 
 import Appointment from '../Appointment/Appointment';
-import Home from '../../Containers/Home/Home';
 import AppointmentSingle from '../../Containers/AppointmentSingle/AppointmentSingle';
 import Bank from '../../Containers/Bank/Bank';
 import Inventory from '../../Containers/Inventory/Inventory';

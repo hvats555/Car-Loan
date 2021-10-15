@@ -1,8 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import { doc, updateDoc, arrayUnion, getDocs, collection, getDoc } from "firebase/firestore"; 
-import calculateEmi from '../../utils/calculateEmi';
-import prepareCarSearchResults from '../../utils/prepareCarSearchResults';
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -10,7 +8,6 @@ import Button from '@mui/material/Button';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import toast from 'react-hot-toast';
 
@@ -68,7 +65,6 @@ function AddApprovedBanks(props) {
     const [alreadyApprovedBanks, setAlreadyApprovedBanks] = useState([]);
     const [banks, setBanks] = useState([]);
     const [bankPrograms, setBankPrograms] = useState(null);
-    const [profitMargin, setProfitMargin] = useState(0);
 
     const handleValidation = () => {
       const fields = approvedBank;

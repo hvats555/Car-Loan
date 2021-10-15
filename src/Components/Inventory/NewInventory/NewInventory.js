@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useState } from 'react';
 
-import _ from 'lodash';
 import uploadInventory from '../../../utils/uploadInventory';
 
 import Grid from '@mui/material/Grid';
@@ -20,11 +19,6 @@ function Newinventory(props) {
     }
 
     const [inventory, setinventory] = useState(inventoryInitialState);
-
-    const inputChangeHandler = (key, value) => {
-        setinventory({...inventory, [key]: value});
-        console.log(inventory);
-    }
 
     const saveinventoryInDb = async (event) => {
         event.preventDefault();

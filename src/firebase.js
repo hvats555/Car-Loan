@@ -1,6 +1,6 @@
 // firebase hosting default is set to public -> make it build
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
