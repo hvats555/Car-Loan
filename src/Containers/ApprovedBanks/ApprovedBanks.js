@@ -15,7 +15,7 @@ import Modal from '../../Components/UI/Modal/Modal';
 // import store from 'store';
 
 function ApprovedBanks(props) {
-    const limit = 500;
+    const limit = 25;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();

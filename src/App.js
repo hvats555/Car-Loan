@@ -11,6 +11,7 @@ import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
 function App() {
   return (
     <Router>
+          {console.log(process.env.REACT_APP_ENV_STATUS)}
           <AuthProvider>
               <div>
                 <Toaster/>

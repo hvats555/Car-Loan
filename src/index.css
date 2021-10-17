@@ -31,7 +31,6 @@ a {
 /* @media only screen and (max-width: 520px) { */
 .tableContainer {
   margin: 0 auto;
-  max-width: 95vw;
   overflow-x: auto;
 }
 /* } */

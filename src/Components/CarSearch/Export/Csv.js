@@ -5,17 +5,17 @@ const _ = require('lodash');
 
 function Csv(props) {
     const data =  props.searchResults.result && !_.isEmpty(props.searchResults) ?  props.searchResults.result.map(item => ({
-        carName: item.car.name,
-        carStockNumber: item.car.stockNumber,
-        carMileage: item.car.mileage,
-        carVin: item.car.vin,
-        carPrice: item.car.price,
-        numberOfAccidents: item.car.numberOfAccidents,
+        car_name: item.car.name,
+        car_stock_number: item.car.stockNumber,
+        car_mileage: item.car.mileage,
+        car_vin: item.car.vin,
+        car_price: item.car.price,
+        number_of_accidents: item.car.numberOfAccidents,
         notes: item.car.notes,
-        totalDamage: item.car.totalDamage,
-        carCalculatedEmi: item.bank.map(bank => bank.calculatedEmi),
-        bankNames: item.bank.map(bank => bank.bankName),
-        bankMonthlyEmi: item.bank.map(bank => bank.monthlyEmi)
+        total_damage: item.car.totalDamage,
+        car_calculated_emi: item.bank.map(bank => bank.calculatedEmi),
+        bank_names: item.bank.map(bank => bank.bankName),
+        bank_monthly_emi: item.bank.map(bank => bank.monthlyEmi)
     })) : null;
 
     return (

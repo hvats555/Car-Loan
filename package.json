@@ -36,8 +36,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:development": "react-app-env --env-file=development.env build",
-    "build:production": "react-app-env --env-file=production.env build",
+    "build:development": "node -r dotenv/config ./node_modules/.bin/react-scripts build dotenv_config_path=development.env",
+    "build:production": "node -r dotenv/config ./node_modules/.bin/react-scripts build dotenv_config_path=production.env",
     "deploy:production-hosting": "(npm run build:production & firebase use production) && firebase deploy --only hosting",
     "deploy:development-hosting": "(npm run build:development & firebase use development) && firebase deploy --only hosting",
     "deploy:all": "(npm run deploy:development-hosting & npm run deploy:production-hosting)",

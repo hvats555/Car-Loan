@@ -39,6 +39,7 @@ export default function SignIn() {
   const {currentUser} = useAuth();
   const history = useHistory();
 
+  const [loginError, setLoginError] = useState();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -49,6 +50,7 @@ export default function SignIn() {
         console.log(currentUser);
     } catch (e) {
         console.log("Failed to login");
+        setLoginError(e);
         console.log(e);
         console.log(currentUser);
     }
@@ -132,17 +134,11 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  {loginError ?
+                   <p style={{color: 'red', textAlign: 'center'}}>Error: {loginError.code.split('/')[1]}</p>
+                  : null}
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
