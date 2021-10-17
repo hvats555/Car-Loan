@@ -1,9 +1,8 @@
 import {DateTime} from 'luxon';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 import db from '../../../firebase';
 import { doc, Timestamp, setDoc, getDoc} from "firebase/firestore"; 
-import { useEffect } from 'react/cjs/react.development';
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
