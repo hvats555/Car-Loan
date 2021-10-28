@@ -17,7 +17,7 @@ function EditAppointment(props) {
         fullName: '',
         phoneNumber: '',
         email: '',
-        appointmentDate: '',
+        appointmentDate: null,
         taxExemption: false
     }
 
@@ -93,13 +93,13 @@ function EditAppointment(props) {
     
             if (docSnap.exists()) {
             setAppointment({
-                id: docSnap.id,
                 fullName: docSnap.data().fullName,
                 phoneNumber: docSnap.data().phoneNumber,
                 email: docSnap.data().email,
-                taxExemption: docSnap.data().taxExemption.toString(),
+                taxExemption: docSnap.data().taxExemption,
+                appointmentDate: docSnap.data().appointmentDate.toMillis(),
+                approvedBanks: docSnap.data().approvedBanks,
                 createdAt: new Date(docSnap.data().createdAt.seconds * 1000).toString(),
-                appointmentDate: new Date(docSnap.data().appointmentDate.seconds * 1000).toString()
             })
     
             } else {
@@ -118,10 +118,10 @@ function EditAppointment(props) {
         event.preventDefault();
 
         if(handleValidation()){
-            appointment.appointmentDate = Timestamp.fromDate(new Date(appointment.appointmentDate));
-            await setDoc(doc(db, "customers", props.id), appointment);
-            setAppointment(appointmentInitialState);
-            setValidationErrors(validationInitialState);
+            let newAppointment = {...appointment};
+            newAppointment.appointmentDate = Timestamp.fromDate(new Date(newAppointment.appointmentDate));
+
+            await setDoc(doc(db, "customers", props.id), newAppointment);
             props.modalCloseHandler();
             toast.success("Application updated");
         }
@@ -129,6 +129,13 @@ function EditAppointment(props) {
 
     const todaysDate = () => {
         return DateTime.now().toFormat('yyyy-MM-dd').toString();
+    }
+
+    const formatDate = (mills) => {
+        if(mills) {
+            const date = new Date(parseInt(mills)).toISOString();
+            return DateTime.fromISO(date).toFormat('yyyy-MM-dd');
+        }
     }
 
     return (
@@ -170,7 +177,7 @@ function EditAppointment(props) {
                         onChange={(event) => {
                             inputChangeHandler("appointmentDate", event.target.value)
                         }}
-                        value={appointment.appointmentDate} placeholder="Appointment Date" />            
+                        value={appointment.appointmentDate ? formatDate(appointment.appointmentDate) : null} placeholder="Appointment Date" />            
                     </Grid>
 
                     <Grid fullWidth item md={6} xs={12}>

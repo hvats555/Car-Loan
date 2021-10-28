@@ -77,8 +77,6 @@ function ListAppointments() {
                     fullName: doc.data().fullName,
                     phoneNumber: doc.data().phoneNumber,
                     email: doc.data().email,
-                    isTradeIn: doc.data().isTradeIn,
-                    createdAt: doc.data().createdAt && new Date(doc.data().createdAt.seconds * 1000).toString(),
                     appointmentDate: doc.data().appointmentDate && new Date(doc.data().appointmentDate.seconds * 1000).toString(),
                 }
                 appointments.push(object);
@@ -99,10 +97,7 @@ function ListAppointments() {
                     id: doc.id,
                     fullName: doc.data().fullName,
                     phoneNumber: doc.data().phoneNumber,
-                    email: doc.data().email,
-                    isTradeIn: doc.data().isTradeIn,
-                    createdAt: doc.data().createdAt && new Date(doc.data().createdAt.seconds * 1000).toString(),
-                    appointmentDate: doc.data().appointmentDate && new Date(doc.data().appointmentDate.seconds * 1000).toString(),
+                    email: doc.data().email
                 }
                 appointments.push(object);
             });

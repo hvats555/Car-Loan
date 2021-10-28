@@ -59,9 +59,7 @@ function AppointmentDetails({ match }) {
                         fullName: doc.data().fullName,
                         phoneNumber: doc.data().phoneNumber,
                         email: doc.data().email,
-                        taxExemption: doc.data().taxExemption.toString(),
-                        createdAt: new Date(doc.data().createdAt.seconds * 1000).toString(),
-                        appointmentDate: new Date(doc.data().appointmentDate.seconds * 1000).toString(),
+                        taxExemption: doc.data().taxExemption,
                         approvedBanks: doc.data().approvedBanks
                     })
                 } else {
@@ -123,7 +121,6 @@ function AppointmentDetails({ match }) {
                     </Modal>
                     : null
                 }
-                {console.log(window.innerWidth)}
                 {   deleteAppointmentModal ?
                     <Modal style={{height: window.innerWidth <520 ? "min(50%, 500px)" : "min(30%, 500px)"}}  modalCloseHandler={closeDeleteAppointmentModal}>
                         <ConfirmationPrompt

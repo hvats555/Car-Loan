@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddApprovedBanks from '../../Components/ApprovedBanks/AddApprovedBanks';
 import ListApprovedBanks from '../../Components/ApprovedBanks/ListApprovedBanks/ListApprovedBanks';
 import CarSearch from '../../Components/CarSearch/CarSearch';
@@ -12,14 +12,16 @@ import AddIcon from '@mui/icons-material/Add';
 import { useAuth } from '../../contexts/AuthContext';
  
 import Modal from '../../Components/UI/Modal/Modal';
+import {omit} from 'lodash';
 // import store from 'store';
+
+import store from 'store';
 
 function ApprovedBanks(props) {
     const limit = 25;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();
-
     
     const [searchResults, setSearchResults] = useState({});
 
@@ -61,6 +63,7 @@ function ApprovedBanks(props) {
             setCarSearchLoading(false);
         }).catch((err) => {
             setCarSearchLoading(false);
+            toast.error("Cannot search, something went wrong!")
             console.log(err);
         })
     }
@@ -76,6 +79,7 @@ function ApprovedBanks(props) {
 
             setSearchResults({
                 result: concatedResult,
+                hasMore: result.data.hasMore,
                 lastDocRef: result.data.lastDocRef
             });
             setMoreCarSearchLoading(false);
@@ -88,6 +92,31 @@ function ApprovedBanks(props) {
     const newApprovedBankModalHandler = (state) => {
         setNewApprovedBankModal(state);
     }
+
+    useEffect(() => {
+        if(store.get(`user_${props.customerId}_search_options`)) {
+            let storedCarSearchOptions = store.get(`user_${props.customerId}_search_options`);
+            setCarSearchOptions({
+                ...carSearchOptions,
+                profitAmount: storedCarSearchOptions.profitAmount,
+                 adminFee: storedCarSearchOptions.adminFee,
+                downPayment: storedCarSearchOptions.downPayment,
+                tradeInValue: storedCarSearchOptions.tradeInValue,
+                termExtension: storedCarSearchOptions.termExtension,
+                interestBreak: storedCarSearchOptions.interestBreak,
+                tradeInAllowance: storedCarSearchOptions.tradeInAllowance,
+                tradeLienAmount: storedCarSearchOptions.tradeLienAmount,
+                warranty: storedCarSearchOptions.warranty,
+                docfee: storedCarSearchOptions.docfee
+            });
+        } else {
+            store.set(`user_${props.customerId}_search_options`, carSearchOptions)
+        }
+    }, [])
+
+    useEffect(() => {
+        store.set(`user_${props.customerId}_search_options`, carSearchOptions)
+    }, [carSearchOptions])
 
     const [email, setEmail] = useState(null);
 
