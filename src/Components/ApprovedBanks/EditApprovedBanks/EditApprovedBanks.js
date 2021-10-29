@@ -60,10 +60,22 @@ function EditApprovedBanks(props) {
         errors.amount['errorText'] = 'Cannot be empty';
       }
 
+      if(fields['amount'] < 0){
+        formIsValid = false;
+        errors.amount['isError'] = !formIsValid;
+        errors.amount['errorText'] = 'Value cannot be negative';
+      }
+
       if(!fields['interestRate']){
         formIsValid = false;
         errors.interestRate['isError'] = !formIsValid;
         errors.interestRate['errorText'] = 'Cannot be empty';
+      }
+
+      if(fields['interestRate'] < 0){
+        formIsValid = false;
+        errors.interestRate['isError'] = !formIsValid;
+        errors.interestRate['errorText'] = 'Value cannot be negative';
       }
 
       if(!fields['term']){
@@ -72,12 +84,24 @@ function EditApprovedBanks(props) {
           errors.term['errorText'] = 'Cannot be empty';
       }
 
+      if(fields['term'] < 0){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Value cannot ne negative';
+    }
+
       if(!fields['monthlyEmi']){
         formIsValid = false;
         errors.term['isError'] = !formIsValid;
         errors.term['errorText'] = 'Cannot be empty';
     }
-  
+
+    if(fields['monthlyEmi'] < 0){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Value cannot be negative';
+    }
+
       setValidationErrors(errors);
       return formIsValid;
     }
@@ -145,7 +169,7 @@ function EditApprovedBanks(props) {
                 <Grid container rowSpacing={1} spacing={1}>
                     <Grid item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.interestRate.isError}
                         helperText={validationErrors.interestRate.errorText}
 
@@ -154,7 +178,7 @@ function EditApprovedBanks(props) {
 
                     <Grid item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.amount.isError}
                         helperText={validationErrors.amount.errorText}
 
@@ -163,7 +187,7 @@ function EditApprovedBanks(props) {
                     
                     <Grid fullWidth item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.term.isError}
                         helperText={validationErrors.term.errorText}
                         
@@ -172,7 +196,7 @@ function EditApprovedBanks(props) {
 
                     <Grid fullWidth item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.monthlyEmi.isError}
                         helperText={validationErrors.monthlyEmi.errorText}
                         

@@ -90,10 +90,22 @@ function AddApprovedBanks(props) {
         errors.amount['errorText'] = 'Cannot be empty';
       }
 
+      if(fields['amount'] < 0){
+        formIsValid = false;
+        errors.amount['isError'] = !formIsValid;
+        errors.amount['errorText'] = 'Value cannot be negative';
+      }
+
       if(!fields['interestRate']){
         formIsValid = false;
         errors.interestRate['isError'] = !formIsValid;
         errors.interestRate['errorText'] = 'Cannot be empty';
+      }
+
+      if(fields['interestRate'] < 0){
+        formIsValid = false;
+        errors.interestRate['isError'] = !formIsValid;
+        errors.interestRate['errorText'] = 'Value cannot be negative';
       }
 
       if(!fields['term']){
@@ -102,10 +114,22 @@ function AddApprovedBanks(props) {
           errors.term['errorText'] = 'Cannot be empty';
       }
 
+      if(fields['term'] < 0){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Value cannot ne negative';
+    }
+
       if(!fields['monthlyEmi']){
         formIsValid = false;
         errors.term['isError'] = !formIsValid;
         errors.term['errorText'] = 'Cannot be empty';
+    }
+
+    if(fields['monthlyEmi'] < 0){
+        formIsValid = false;
+        errors.term['isError'] = !formIsValid;
+        errors.term['errorText'] = 'Value cannot be negative';
     }
   
       setValidationErrors(errors);
@@ -247,7 +271,7 @@ function AddApprovedBanks(props) {
 
                     <Grid item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()} 
                         errorState={validationErrors.interestRate.isError}
                         helperText={validationErrors.interestRate.errorText}
 
@@ -256,7 +280,7 @@ function AddApprovedBanks(props) {
 
                     <Grid item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()} 
                         errorState={validationErrors.amount.isError}
                         helperText={validationErrors.amount.errorText}
 
@@ -265,7 +289,7 @@ function AddApprovedBanks(props) {
                     
                     <Grid fullWidth item xs={12}>
                         <TextField 
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.term.isError}
                         helperText={validationErrors.term.errorText}
                         
@@ -274,22 +298,12 @@ function AddApprovedBanks(props) {
 
                     <Grid fullWidth item xs={12}>
                         <TextField
-                        
+                        onWheel={(e) => e.target.blur()}
                         errorState={validationErrors.monthlyEmi.isError}
                         helperText={validationErrors.monthlyEmi.errorText}
                         
                         label="Monthly EMI" fullWidth id="outlined-basic" size="small" type="number" name="monthlyEmi" value={approvedBank.monthlyEmi} onChange={(event) => {inputChangeHandler("monthlyEmi", event.target.value)}} />
                     </Grid>
-
-
-                    {/* <Grid fullWidth item xs={12}>
-                        <TextField label="Down Payment" label="Down payment" fullWidth id="outlined-basic" size="small" type="number" name="downPayment" value={approvedBank.downPayment} onChange={(event) => {inputChangeHandler("downPayment", event.target.value)}} />
-                    </Grid>
-
-
-                    <Grid fullWidth item xs={12}>
-                        <TextField label="Trade In Value" fullWidth id="outlined-basic" size="small" type="number" name="tradeIn" value={approvedBank.tradeIn} onChange={(event) => {inputChangeHandler("tradeIn", event.target.value)}} />
-                    </Grid> */}
                 </Grid>
 
                 <Button fullWidth  sx={{margin: '20px 0'}} type="submit" variant="contained">Add Bank</Button>

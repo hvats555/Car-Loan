@@ -11,9 +11,11 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import commaNumber from 'comma-number';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {useState} from 'react'
 
-const _ = require('lodash');
+import {startCase, isEmpty} from 'lodash'
 
 function SearchResultsTable(props) {
     const [tableStyle, setTableStyle] = useState({});
@@ -44,15 +46,15 @@ function SearchResultsTable(props) {
         <div className="tableContainer">
              <Table sx={{marginTop: '1rem'}} size="small">
                  {
-                     props.searchResults && !_.isEmpty(props.searchResults) ?
+                     props.searchResults && !isEmpty(props.searchResults) ?
                      <TableHead>    
                         <TableRow>
-                            <TableCell style={{textAlign: 'center'}}><strong>Image</strong></TableCell>
-                            <TableCell style={{textAlign: 'center'}}><strong>Vehical</strong></TableCell>
-                            <TableCell style={{textAlign: 'center'}}><strong>Age</strong></TableCell>
-                            <TableCell style={{textAlign: 'center'}}><strong>Location</strong></TableCell>
-                            <TableCell style={{textAlign: 'center'}}><strong>Mileage</strong></TableCell>
-                            <TableCell style={{textAlign: 'center'}}><strong>CBB</strong></TableCell>
+                            <TableCell><strong>Image</strong></TableCell>
+                            <TableCell><strong>Vehical</strong></TableCell>
+                            <TableCell><strong>Age</strong></TableCell>
+                            <TableCell><strong>Location</strong></TableCell>
+                            <TableCell><strong>Mileage</strong></TableCell>
+                            <TableCell><strong>CBB</strong></TableCell>
 
                             {props.approvedBanks ? props.approvedBanks.map((bank, index) => (
                                 <TableCell key={bank.bankId}><strong>{bank.bankName}</strong></TableCell>
@@ -63,42 +65,51 @@ function SearchResultsTable(props) {
                  }
                 
                 {!props.carSearchLoading ? <TableBody>
-                    { props.searchResults && !_.isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
+                    { props.searchResults && !isEmpty(props.searchResults) ? props.searchResults.result.map((results, index) => (
                         <TableRow key={index}>
-                            <TableCell style={{textAlign: 'center'}}>
+                            <TableCell>
                                 <CardMedia
                                 component="img"
                                 sx={{ width: 70, height: 70, borderRadius:'50%', display: {sm: 'block' } }}
                                 image={results.car.coverImage}/>
                             </TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>
-                                {results.car.name}
+                            <TableCell>
                                 <div>
-                                    Stock # {results.car.stockNumber + " " + results.car.vin} <br />
-                                    Cost: {results.car.price + parseInt(results.car.profit)} <br />
-
-                                    <a style={{color: results.car.totalDamage > 5000 ? 'red' : '#0645AD', textDecoration: 'underline'}} target="_blank" href={results.car.carFaxLink}>Carfax: ${results.car.totalDamage} ({results.car.notes}) {results.car.numberOfAccidents} accidents</a>
+                                    <span>
+                                        {results.car.name} Stock# {results.car.stockNumber}
+                                    </span>
                                 </div>
+
+                                <div>
+                                    {results.car.vin}
+                                </div>
+
+                                <div>
+                                    cost: ${commaNumber(results.car.price + parseInt(results.car.profit))}
+                                </div>
+
+                                <a style={{color: results.car.totalDamage > 5000 ? 'red' : '#0645AD', textDecoration: 'underline'}} target="_blank" href={results.car.carFaxLink}>Carfax: ${commaNumber(results.car.totalDamage)} ({results.car.notes}) {results.car.numberOfAccidents} accidents</a>
+
                             </TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>{results.car.age}</TableCell>
+                            <TableCell>{results.car.age}</TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>{results.car.location}</TableCell>
+                            <TableCell>{results.car.location}</TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>{results.car.mileage} Kms</TableCell>
+                            <TableCell>{commaNumber(results.car.mileage)}kms</TableCell>
 
-                            <TableCell style={{textAlign: 'center'}}>
+                            <TableCell>
                                 {results.bank.map(b => (
                                     <div>
-                                        <strong>{b.bankName}</strong>: {b.cbb.condition} {b.cbb.value}
+                                        <strong>{b.bankName}</strong>: {startCase(b.cbb.condition)} ${commaNumber(b.cbb.value)}
                                         <br />
                                     </div>
                                 ))}
 
-                                <strong>Found :</strong> {results.car.featuresFound.map((f) => (`${f}, `))} <br/>
+                                <strong>Found :</strong> {results.car.featuresFound.join(", ")} <br/>
 
-                                <strong>Not Found :</strong> {results.car.featuresNotFound.map((f) => (`${f}, `))}
+                                <strong>Not Found :</strong> {results.car.featuresNotFound.join(", ")}
                             </TableCell>
 
                             {/* {results.bank.map((b) => (
@@ -110,22 +121,21 @@ function SearchResultsTable(props) {
                             func(props.approvedBanks, results.bank).map((b) => {
                                 if(b.foundCount) {
                                     return (
-                                        <TableCell sx={{color: "green", textAlign: "center"}}>
-                                            ${b.calculatedEmi}/mo
+                                        <TableCell sx={{color: "green"}}>
+                                            ${Math.round(b.calculatedEmi)}/mo
                                             <br/>
-                                            ${b.calculatedEmi/2}/bw
+                                            ${Math.round(b.calculatedEmi/2)}/bw
                                             <br/>
-                                            {b.interestRate}%/{b.term}
+
+                                            <span style={{whiteSpace:'nowrap'}}>
+                                                {b.interestRate.toFixed(2)}% {b.term}mo
+                                            </span>
                                         </TableCell>
                                     )
                                 } else {
                                     return (
-                                        <TableCell sx={{color: "red", textAlign: "center"}}>
-                                            ${b.calculatedEmi}/mo
-                                            <br/>
-                                            ${b.calculatedEmi/2}/bw
-                                            <br/>
-                                            {b.interestRate}%/{b.term}
+                                        <TableCell sx={{color: "red"}}>
+                                            <CancelIcon></CancelIcon>
                                         </TableCell>
                                     )
                                 }
@@ -140,7 +150,7 @@ function SearchResultsTable(props) {
                     </Box> }
             </Table>
 
-            {props.searchResults && !_.isEmpty(props.searchResults) && props.searchResults.hasMore ?
+            {props.searchResults && !isEmpty(props.searchResults) && props.searchResults.hasMore ?
                 !props.moreCarSearchLoading ?
                     <Button sx={{display: 'flex', justifyContent: "center", margin: '0 auto', marginTop: "1rem"}} variant="contained" size="medium"  onClick={props.searchMoreResultsHandler}>Load more</Button>:  <Box sx={{ width: '100%', display: 'flex', justifyContent: "center", margin: '0 auto', marginTop: "1rem"}}>
                     <CircularProgress />

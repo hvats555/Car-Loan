@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import { min } from 'lodash';
 const _ = require('lodash');
  
 function CarSearch(props) {
@@ -28,39 +29,71 @@ function CarSearch(props) {
 
                 <div className="searchOptionsForm">
                     <div>
-                        <TextField label="Profit Amount" fullWidth id="outlined-basic" size="small" type="number" name="profitAmount" placeholder="Profit Amount" value={props.carSearchOptions.profitAmount} onChange={(event) => {props.carSearchOptionsHandler("profitAmount", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.profitAmount.isError}
+                        helperText={props.carSearchValiationErrors.profitAmount.errorText}
+                        
+                        onWheel={(e) => e.target.blur()} label="Profit Amount" fullWidth id="outlined-basic" size="small" type="number" name="profitAmount" placeholder="Profit Amount" value={props.carSearchOptions.profitAmount} onChange={(event) => {props.carSearchOptionsHandler("profitAmount", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Admin Fee" fullWidth id="outlined-basic" size="small" type="number" name="adminFee" placeholder="Admin Fee" value={props.carSearchOptions.adminFee} onChange={(event) => {props.carSearchOptionsHandler("adminFee", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.adminFee.isError}
+                        helperText={props.carSearchValiationErrors.adminFee.errorText}
+                        onWheel={(e) => e.target.blur()} label="Admin Fee" fullWidth id="outlined-basic" size="small" type="number" name="adminFee" placeholder="Admin Fee" value={props.carSearchOptions.adminFee} onChange={(event) => {props.carSearchOptionsHandler("adminFee", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Cash Down" fullWidth id="outlined-basic" size="small" type="number" name="downPayment" placeholder="Cash Down" value={props.carSearchOptions.downPayment} onChange={(event) => {props.carSearchOptionsHandler("downPayment", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.downPayment.isError}
+                        helperText={props.carSearchValiationErrors.downPayment.errorText}
+
+                        onWheel={(e) => e.target.blur()} label="Cash Down" fullWidth id="outlined-basic" size="small" type="number" name="downPayment" placeholder="Cash Down" value={props.carSearchOptions.downPayment} onChange={(event) => {props.carSearchOptionsHandler("downPayment", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Trade in Allowance" fullWidth id="outlined-basic" size="small" type="number" name="tradeInAllowance" placeholder="Trade in Allowance" value={props.carSearchOptions.tradeInAllowance} onChange={(event) => {props.carSearchOptionsHandler("tradeInAllowance", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.tradeInAllowance.isError}
+                        helperText={props.carSearchValiationErrors.tradeInAllowance.errorText}
+
+                        onWheel={(e) => e.target.blur()} label="Trade in Allowance" fullWidth id="outlined-basic" size="small" type="number" name="tradeInAllowance" placeholder="Trade in Allowance" value={props.carSearchOptions.tradeInAllowance} onChange={(event) => {props.carSearchOptionsHandler("tradeInAllowance", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Trade Lien Amount" fullWidth id="outlined-basic" size="small" type="number" name="tradeLienAmount" placeholder="Trade Lien Amount" value={props.carSearchOptions.tradeLienAmount} onChange={(event) => {props.carSearchOptionsHandler("tradeLienAmount", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.tradeLienAmount.isError}
+                        helperText={props.carSearchValiationErrors.tradeLienAmount.errorText}
+                        
+                        onWheel={(e) => e.target.blur()} label="Trade Lien Amount" fullWidth id="outlined-basic" size="small" type="number" name="tradeLienAmount" placeholder="Trade Lien Amount" value={props.carSearchOptions.tradeLienAmount} onChange={(event) => {props.carSearchOptionsHandler("tradeLienAmount", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Docfee" fullWidth id="outlined-basic" size="small" type="number" name="docfee" placeholder="Docfee" value={props.carSearchOptions.docfee} onChange={(event) => {props.carSearchOptionsHandler("docfee", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.docfee.isError}
+                        helperText={props.carSearchValiationErrors.docfee.errorText}
+                        
+                        onWheel={(e) => e.target.blur()} label="Docfee" fullWidth id="outlined-basic" size="small" type="number" name="docfee" placeholder="Docfee" value={props.carSearchOptions.docfee} onChange={(event) => {props.carSearchOptionsHandler("docfee", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Warranty" fullWidth id="outlined-basic" size="small" type="number" name="warranty" placeholder="Warranty" value={props.carSearchOptions.warranty} onChange={(event) => {props.carSearchOptionsHandler("warranty", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.warranty.isError}
+                        helperText={props.carSearchValiationErrors.warranty.errorText}
+                        onWheel={(e) => e.target.blur()} label="Warranty" fullWidth id="outlined-basic" size="small" type="number" name="warranty" placeholder="Warranty" value={props.carSearchOptions.warranty} onChange={(event) => {props.carSearchOptionsHandler("warranty", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Term extenstion" fullWidth id="outlined-basic" size="small" type="number" name="termExtension" placeholder="Term extenstion" value={props.carSearchOptions.termExtension} onChange={(event) => {props.carSearchOptionsHandler("termExtension", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.termExtension.isError}
+                        helperText={props.carSearchValiationErrors.termExtension.errorText} 
+                        onWheel={(e) => e.target.blur()} label="Term extenstion" fullWidth id="outlined-basic" size="small" type="number" name="termExtension" placeholder="Term extenstion" value={props.carSearchOptions.termExtension} onChange={(event) => {props.carSearchOptionsHandler("termExtension", event.target.value)}} />
                     </div>
 
                     <div>
-                        <TextField label="Interest Break" fullWidth id="outlined-basic" size="small" type="number" name="interestBreak" placeholder="Interest break" value={props.carSearchOptions.interestBreak} onChange={(event) => {props.carSearchOptionsHandler("interestBreak", event.target.value)}} />
+                        <TextField
+                        errorState={props.carSearchValiationErrors.interestBreak.isError}
+                        helperText={props.carSearchValiationErrors.interestBreak.errorText}
+                        onWheel={(e) => e.target.blur()} label="Interest Break" fullWidth id="outlined-basic" size="small" type="number" name="interestBreak" placeholder="Interest break" value={props.carSearchOptions.interestBreak} onChange={(event) => {props.carSearchOptionsHandler("interestBreak", event.target.value)}} />
                     </div>
                     
                     <div>
