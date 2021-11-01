@@ -10,12 +10,16 @@ function Csv(props) {
         car_mileage: item.car.mileage,
         car_vin: item.car.vin,
         car_price: item.car.price,
+        car_features_found: item.car.featuresFound.map(f => f),
+        car_features_not_found: item.car.featuresNotFound.map(f => f),
         number_of_accidents: item.car.numberOfAccidents,
         notes: item.car.notes,
         total_damage: item.car.totalDamage,
         car_calculated_emi: item.bank.map(bank => bank.calculatedEmi),
         bank_names: item.bank.map(bank => bank.bankName),
-        bank_monthly_emi: item.bank.map(bank => bank.monthlyEmi)
+        bank_monthly_emi: item.bank.map(bank => bank.monthlyEmi),
+        cbb_condition: item.bank.map(bank => bank.cbb.condition),
+        cbb_value: item.bank.map(bank => bank.cbb.value)
     })) : null;
 
     return (
