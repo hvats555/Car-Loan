@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { doc, updateDoc, arrayUnion, getDocs, collection, getDoc } from "firebase/firestore"; 
+import { doc, updateDoc, arrayUnion, getDocs, collection, getDoc, addDoc, query, onSnapshot, setDoc } from "firebase/firestore"; 
 
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -17,7 +17,7 @@ import db from '../../firebase';
 
 function AddApprovedBanks(props) {
     const initialApprovedBankState = {
-        bankPrograms: null,
+        bankProgram: null,
         bankId: null,
         bankName: null,
         amount: null,
@@ -64,7 +64,7 @@ function AddApprovedBanks(props) {
     const [approvedBank, setApprovedBank] = useState(initialApprovedBankState);
     const [alreadyApprovedBanks, setAlreadyApprovedBanks] = useState([]);
     const [banks, setBanks] = useState([]);
-    const [bankPrograms, setBankPrograms] = useState(null);
+    const [bankProgram, setbankProgram] = useState(null);
 
     const handleValidation = () => {
       const fields = approvedBank;
@@ -138,17 +138,19 @@ function AddApprovedBanks(props) {
 
     useEffect(() => {
         const fetchApprovedBanks = async () => {
-            const customerRef = doc(db, "customers", props.customerId);
-            const customerSnap = await getDoc(customerRef);
-            const alreadyApprovedBanksArray = []
-            customerSnap.data().approvedBanks.forEach((approvedBank) => {
-                alreadyApprovedBanksArray.push(approvedBank.bankId);
+            const q = query(collection(db, `customers/${props.customerId}/approvedBanks`));
+
+            onSnapshot(q, (querySnapshot) => {
+                const banks = [];
+                querySnapshot.forEach((doc) => {
+                    banks.push(doc.id);
+                });
+
+                setAlreadyApprovedBanks(banks)
             });
-
-            setAlreadyApprovedBanks(alreadyApprovedBanksArray);
         }
-        fetchApprovedBanks();
 
+        fetchApprovedBanks();
 
         const fetchBanks = async () => {
             const querySnapshot = await getDocs(collection(db, "banks"));
@@ -158,7 +160,7 @@ function AddApprovedBanks(props) {
                 banksArray.push({
                     id: doc.id,
                     name: doc.data().name,
-                    bankPrograms: doc.data().bankInterest
+                    bankProgram: doc.data().bankInterest
                 });
             });
             setBanks(banksArray);
@@ -172,11 +174,9 @@ function AddApprovedBanks(props) {
         if(handleValidation()) {
             // approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
 
-            const approvedBankRef = doc(db, "customers", props.customerId);
-    
-            await updateDoc(approvedBankRef, {
-                approvedBanks: arrayUnion(approvedBank)
-            });
+            // await addDoc(collection(db, ), approvedBank);
+
+            await setDoc(doc(db, `customers/${props.customerId}/approvedBanks`, approvedBank.bankId), approvedBank);
     
             setApprovedBank(initialApprovedBankState);
             setValidationErrors(validationInitialState);
@@ -201,12 +201,12 @@ function AddApprovedBanks(props) {
             bankName: banks[index].name
         });
 
-        setBankPrograms(banks[index].bankPrograms);
+        setbankProgram(banks[index].bankProgram);
     }
 
     const programInputHandler = (index) => {
         setApprovedBank({
-            ...approvedBank, bankProgram: bankPrograms[index]
+            ...approvedBank, bankProgram: bankProgram[index]
         })
     }
 
@@ -233,7 +233,7 @@ function AddApprovedBanks(props) {
 
                         {
                             banks ? banks.map((bank, index) => (
-                                <MenuItem disabled={includes(alreadyApprovedBanks, bank.id)} key={bank.id}value={index}>{bank.name}</MenuItem> 
+                                <MenuItem disabled={includes(alreadyApprovedBanks, bank.id)} key={bank.id} value={index}>{bank.name}</MenuItem> 
                             )) : null
                         }
 
@@ -259,7 +259,7 @@ function AddApprovedBanks(props) {
                         >
 
                         {
-                            bankPrograms.map((program, index) => (
+                            bankProgram.map((program, index) => (
                                 <MenuItem key={index} value={index}>{program.Program} - {program.RatesFrom}</MenuItem>
                             ))
                         }

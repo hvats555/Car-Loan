@@ -18,9 +18,6 @@ import {useState} from 'react'
 import {startCase, isEmpty} from 'lodash'
 
 function SearchResultsTable(props) {
-    const [tableStyle, setTableStyle] = useState({});
-    const [tableRowStyle, setTableRowStyle] = useState({});
-
     const func = (approvedBank, bank) => {
         for(let i=0; i<approvedBank.length; i++) {
             for(let j=0; j<bank.length; j++) {

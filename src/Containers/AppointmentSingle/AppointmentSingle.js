@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import db from '../../firebase';
-import { doc, onSnapshot, deleteDoc } from "firebase/firestore";
+import { doc, onSnapshot, deleteDoc, query, collection } from "firebase/firestore";
 
 import todaysDate from '../../utils/todayDate';
 
@@ -35,6 +35,7 @@ function AppointmentDetails({ match }) {
     }
 
     const [appointment, setAppointment] = useState(appointmentInitialState);
+    const [approvedBanks, setApprovedBanks] = useState({});
 
     const [deleteAppointmentModal, setDeleteAppointmentModal] = useState(false);
 
@@ -68,10 +69,26 @@ function AppointmentDetails({ match }) {
             });
         }
 
+        const fetchApprovedBanks = async () => {
+            const q = query(collection(db, `customers/${match.params.id}/approvedBanks`));
+
+            onSnapshot(q, (querySnapshot) => {
+                const banks = [];
+                querySnapshot.forEach((doc) => {
+                    banks.push(doc.data());
+                });
+
+                setApprovedBanks(banks)
+            });
+        }
+
+        fetchApprovedBanks();
+
         fetchAppointments(match.params.id);
 
         return () => {
             setAppointment({});
+            setApprovedBanks({});
         }
     }, []);
 
@@ -79,7 +96,7 @@ function AppointmentDetails({ match }) {
         await deleteDoc(doc(db, "customers", id));
         setDeleteAppointmentId('');
         closeDeleteAppointmentModal();
-        history.push('/appointments')
+        history.push('/')
     }
 
     return (
@@ -112,7 +129,7 @@ function AppointmentDetails({ match }) {
                 </div>
             </Box>
 
-            <ApprovedBanks customerId={match.params.id} appointment={appointment} />
+            <ApprovedBanks customerId={match.params.id} approvedBanks={approvedBanks} appointment={appointment} />
 
                 {
                     editAppointmentModal ? 

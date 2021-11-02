@@ -18,7 +18,7 @@ import {omit} from 'lodash';
 import store from 'store';
 
 function ApprovedBanks(props) {
-    const limit = 25;
+    const limit = 1;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();
@@ -299,9 +299,9 @@ function ApprovedBanks(props) {
                     <AddApprovedBanks searchResultsHandler={searchResultsHandler} modalCloseHandler={() => {newApprovedBankModalHandler(false)}} customerId={props.customerId} />
                 </Modal> : null
             }
-            <ListApprovedBanks searchResultsHandler={searchResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks}/>
+            <ListApprovedBanks searchResultsHandler={searchResultsHandler} customerId={props.customerId} approvedBanks={props.approvedBanks}/>
 
-            <CarSearch carSearchValiationErrors={carSearchOptionValiationErrors} emailSendLoading={emailSendLoading} sendEmail={sendEmail} email={email} setEmail={setEmail} carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.appointment.approvedBanks} />
+            <CarSearch carSearchValiationErrors={carSearchOptionValiationErrors} emailSendLoading={emailSendLoading} sendEmail={sendEmail} email={email} setEmail={setEmail} carSearchOptions={carSearchOptions} carSearchOptionsHandler={carSearchOptionsHandler} carSearchLoading={carSearchLoading} searchResults={searchResults} moreCarSearchLoading={moreCarSearchLoading} searchResultsHandler={searchResultsHandler} searchMoreResultsHandler={searchMoreResultsHandler} customerId={props.customerId} approvedBanks={props.approvedBanks} />
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { doc, updateDoc, arrayUnion, getDocs, collection, arrayRemove } from "firebase/firestore"; 
+import { doc, updateDoc, arrayUnion, getDocs, collection, arrayRemove, setDoc } from "firebase/firestore"; 
 import db from '../../../firebase';
 
 import TextField from '@mui/material/TextField';
@@ -126,29 +126,13 @@ function EditApprovedBanks(props) {
         
         if(handleValidation()) {
             // approvedBank.monthlyEmi = calculateEmi(approvedBank.amount, approvedBank.interestRate, approvedBank.term, approvedBank.downPayment, approvedBank.tradeIn);
-
-            const approvedBankRef = doc(db, "customers", props.customerId);
-    
-            let objectToDelete = props.approvedBank;
-            if(!_.isUndefined(props.approvedBank.foundCount)) {
-                objectToDelete = _.omit(props.approvedBank, ['foundCount', 'calculatedEmi']);
-            }
     
             let objectToAdd = approvedBank;
             if(!_.isUndefined(approvedBank.foundCount)) {
                 objectToAdd = _.omit(approvedBank, ['foundCount', 'calculatedEmi']);
             }
             
-            console.log("Object to delete", objectToDelete);
-    
-            await updateDoc(approvedBankRef, {
-                approvedBanks: arrayRemove(objectToDelete)
-            });
-    
-    
-            await updateDoc(approvedBankRef, {
-                approvedBanks: arrayUnion(objectToAdd)
-            });
+            await setDoc(doc(db, `customers/${props.customerId}/approvedBanks/${props.approvedBank.bankId}`), objectToAdd);
     
             setApprovedBank(initialApprovedBankState);
             setValidationErrors(validationInitialState);

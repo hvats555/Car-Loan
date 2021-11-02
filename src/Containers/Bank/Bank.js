@@ -21,7 +21,7 @@ function Bank() {
                 <AddIcon />
             </Fab>
 
-            {newBankModal ? 
+            { newBankModal ? 
                 <Modal modalCloseHandler={() => {newBankModalHandler(false)}}>
                     <NewBank modalCloseHandler = {() => {newBankModalHandler(false)}}/>
                 </Modal> : null
