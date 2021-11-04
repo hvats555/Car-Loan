@@ -18,7 +18,7 @@ import {omit} from 'lodash';
 import store from 'store';
 
 function ApprovedBanks(props) {
-    const limit = 10;
+    const limit = 1;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();
@@ -204,21 +204,26 @@ function ApprovedBanks(props) {
             setMoreCarSearchLoading(true);
     
             axios.post(url, carSearchOptions).then((result) => {
+                console.log(result)
+
                 const concatedResult = searchResults.result.concat(result.data.result);
-    
                 setSearchResults({
                     result: concatedResult,
                     hasMore: result.data.hasMore,
                     lastDocRef: result.data.lastDocRef
                 });
                 setMoreCarSearchLoading(false);
+                console.log("More results...")
+                return
             }).catch((err) => {
                 setMoreCarSearchLoading(false);
                 console.log(err);
+                return;
             })
             setCarSearchOptionValiationErrors(carSearchOptionValiationInitialState);
-
         }
+
+        console.log("Loading more results ...");
     }
 
     const newApprovedBankModalHandler = (state) => {
