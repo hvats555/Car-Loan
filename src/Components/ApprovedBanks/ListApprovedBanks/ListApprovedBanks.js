@@ -27,7 +27,11 @@ function ListApprovedBanks(props) {
 
     const approvedBankDeleteHandler = async (id) => {
         console.log(props.customerId);
-        await deleteDoc(doc(db, `customers/${props.customerId}/approvedBanks`, id));
+        await deleteDoc(doc(db, `customers/${props.customerId}/approvedBanks`, id)).then((res) => {
+            console.log(res)
+        }).catch((err) => {
+            console.log(err)
+        });
     }
 
     return (

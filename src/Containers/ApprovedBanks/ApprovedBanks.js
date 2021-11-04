@@ -18,7 +18,7 @@ import {omit} from 'lodash';
 import store from 'store';
 
 function ApprovedBanks(props) {
-    const limit = 1;
+    const limit = 10;
     const [newApprovedBankModal, setNewApprovedBankModal] = useState(false);
 
     const {currentUser} = useAuth();
